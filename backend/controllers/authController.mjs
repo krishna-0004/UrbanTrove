@@ -12,16 +12,18 @@ export const googleAuthSuccess = async (req, res) => {
     maxAge: 7 * 24 * 60 * 1000
   });
 
-  res.status(200).json({
-    message: "Login Successful",
-    user: {
-      id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      avatar: req.user.avatar,
-      role: req.user.role
-    }
-  });
+  // res.status(200).json({
+  //   message: "Login Successful",
+  //   user: {
+  //     id: req.user._id,
+  //     name: req.user.name,
+  //     email: req.user.email,
+  //     avatar: req.user.avatar,
+  //     role: req.user.role
+  //   }
+  // });
+
+  res.redirect(`${process.env.FRONTEND_URL}`)
 };
 
 export const googleAuthFailure = (req, res) => {

@@ -1,0 +1,79 @@
+.dashboard-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.dashboard-profile-card h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.dashboard-profile-card p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.dashboard-role {
+  font-size: 0.85rem;
+  color: #888;
+  background-color: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.dashboard-action {
+  flex: 1 1 40%;
+  min-width: 140px;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  text-decoration: none;
+  color: #333;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.dashboard-action:hover {
+  background-color: #f1f1f1;
+  border-color: #ddd;
+}
+
+.logout-btn {
+  background-color: #ffe5e5;
+  color: #c62828;
+  border: 1px solid #f5c2c2;
+}

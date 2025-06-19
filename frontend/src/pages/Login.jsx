@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuthContext } from "../context/AuthContext";
 import "./login.css";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+
+  const { setUser } = useAuthContext(); // optional if you want to instantly update context
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
     reset,
@@ -22,16 +29,40 @@ const Login = () => {
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setOtpSent(false);
-    reset(); // clear form
+    reset();
+    setServerError("");
   };
 
-  const onSubmit = (data) => {
-    if (!otpSent) {
-      console.log(`Sending OTP to ${data.email}`);
-      setOtpSent(true);
-    } else {
-      console.log(`Verifying OTP ${data.otp} for ${data.email}`);
-      // Verify OTP logic here
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      setServerError("");
+
+      if (!otpSent) {
+        // Send OTP API
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
+          email: data.email,
+        });
+        setOtpSent(true);
+      } else {
+        // Verify OTP API
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
+          { email: data.email, otp: data.otp },
+          { withCredentials: true }
+        );
+
+        // Optional: update user context if needed
+        if (res.data?.user) {
+          setUser?.(res.data.user); // only if context supports setUser
+        }
+
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      setServerError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,7 +107,15 @@ const Login = () => {
             </>
           )}
 
-          <button type="submit">{otpSent ? "Verify OTP" : "Send OTP"}</button>
+          {serverError && <span className="error">{serverError}</span>}
+
+          <button type="submit" disabled={loading}>
+            {loading
+              ? "Please wait..."
+              : otpSent
+              ? "Verify OTP"
+              : "Send OTP"}
+          </button>
         </form>
 
         <div className="divider">OR</div>
@@ -86,7 +125,7 @@ const Login = () => {
           Continue with Google
         </button>
 
-        <p onClick={toggleForm}>
+        <p onClick={toggleForm} style={{ cursor: "pointer" }}>
           {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
         </p>
       </div>
