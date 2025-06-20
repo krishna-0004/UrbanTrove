@@ -8,6 +8,7 @@ const variantSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
     title: { type: String, required: true },
+    slug: { type: String, unique: true }, 
     description: { type: String, required: true },
     sku: { type: String, required: true, unique: true },
     price: { type: Number, required: true},
@@ -37,6 +38,13 @@ const productSchema = new mongoose.Schema({
     metaTitle: { type: String },
     metaDescription: { type: String },
     createdAt: { type: Date, default: Date.now }
+});
+
+productSchema.pre('save', function (next) {
+    if (!this.slug || this.isModified("title")) {
+        this.slug = slugify(this.title, { lower: true, strict: true });
+    }
+    next();
 });
 
 export default mongoose.model('Product', productSchema);

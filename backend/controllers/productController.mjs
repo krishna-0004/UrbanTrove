@@ -1,4 +1,6 @@
+import slugify from "slugify";
 import Product from "../model/Product.mjs";
+import Review from "../model/Review.mjs";
 
 export const getFeaturedCategories = async (req, res) => {
   try {
@@ -48,4 +50,52 @@ export const getNewArrivals = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
+
+export const getProductBySlugId = async (req, res) => {
+  const { slugId } = req.params;
+
+  try {
+    const id = slugId.split("-").slice(-1)[0];
+
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id).populate("reviews");
+
+    if (!product || !product.isVisible) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const expectedSlug = slugify(product.title, { lower: true, strict: true });
+    if (!slugId.startsWith(expectedSlug)) {
+      return res.redirect(`/product/${expectedSlug}-${product._id}`);
+    }
+
+    res.json(product);
+  } catch (err) {
+    console.error("Error fetching product:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getRelatedProducts = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const currentProduct = await Product.findById(id);
+    if (!currentProduct) return res.status(404).json({ message: "Product not found" });
+
+    const related = await Product.find({
+      _id: { $ne: id },
+      categories: { $in: currentProduct.categories },
+      isVisible: true
+    }).limit(9);
+
+    res.json(related);
+  }catch (err) {
+    console.error("Error fetching related products:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+}
 

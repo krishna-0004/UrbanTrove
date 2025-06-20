@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './productCard.css';
 import { FaHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import slugify from 'slugify'; // ✅ Ensure this is installed via `npm install slugify`
 
 const ProductCard = ({ product }) => {
   const [liked, setLiked] = useState(false);
@@ -9,10 +11,16 @@ const ProductCard = ({ product }) => {
     setLiked(!liked);
   };
 
+  // ✅ Generate SEO-friendly slug with id
+  const slugId = `${slugify(product.title, { lower: true, strict: true })}-${product._id}`;
+
   return (
     <div className="product-card small">
       <div className="image-wrapper">
-        <img src={product.images[0]} alt={product.title} />
+        <Link to={`/product/${slugId}`}>
+          <img src={product.images[0]} alt={product.title} />
+        </Link>
+
         <button
           className={`wishlist-btn ${liked ? 'liked' : ''}`}
           onClick={toggleWishlist}
@@ -20,13 +28,18 @@ const ProductCard = ({ product }) => {
         >
           <FaHeart />
         </button>
+
         {product.discount > 0 && (
           <div className="discount-badge">-{product.discount}%</div>
         )}
       </div>
 
       <div className="product-info">
-        <h3 className="product-title">{product.title}</h3>
+        <h3 className="product-title">
+          <Link to={`/product/${slugId}`} className="product-link">
+            {product.title}
+          </Link>
+        </h3>
 
         <div className="price">
           ₹{product.finalPrice.toFixed(2)}
