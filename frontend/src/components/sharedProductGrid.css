@@ -1,0 +1,19 @@
+.shop-page {
+  padding: 40px 5%;
+  background-color: #fefefe;
+}
+
+.shop-page h2 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #2f2f2f;
+  border-bottom: 2px solid #6b4f4f;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}

@@ -1,12 +1,16 @@
 import React from 'react';
-import Navbar from '../components/Navbar.jsx';
 import ImageSlider from '../components/ImageSlider.jsx';
+import FeaturedCategories from '../components/FeaturedCategories.jsx';
+import BestSellers from '../components/BestSellers.jsx';
+import NewArrivals from '../components/NewArrivals.jsx';
 
 const Home = () => {
   return (
     <>
-        <Navbar />
         <ImageSlider />
+        <FeaturedCategories />
+        <BestSellers />
+        <NewArrivals />
     </>
   );
 };

@@ -7,6 +7,8 @@ import "./config/passport.mjs";
 import dotenv from "dotenv"
 
 import authRoutes from "./routes/authRoutes.mjs";
+import productRoutes from "./routes/productRoutes.mjs";
+
 
 import { ConnectDB } from "./config/db.mjs";
 
@@ -26,3 +28,4 @@ app.get("/", (req, res) => {
 });
 app.use("/api/auth", authRoutes);
 export default app;
+app.use('/api/products', productRoutes);
