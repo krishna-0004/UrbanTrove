@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Shop from "./pages/Shop";
 import ProductDetails from "./pages/ProductDetails";
 import SearchResults from "./pages/SearchResults";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -29,6 +30,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="/wishlist"
+            element={
+              <ProtectedRoute>
+                <Wishlist />
               </ProtectedRoute>
             }
           />

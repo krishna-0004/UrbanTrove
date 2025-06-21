@@ -51,7 +51,7 @@ const Navbar = () => {
       )}
 
       {/* Wishlist & Cart */}
-      <Link to="/whishlist">
+      <Link to="/wishlist">
         <IoHeart size={30} />
       </Link>
       <Link to="/cart">

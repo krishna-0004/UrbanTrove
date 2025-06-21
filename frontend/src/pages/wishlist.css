@@ -1,0 +1,17 @@
+/* src/pages/wishlist.css */
+.wishlist-page {
+  padding: 40px 5%;
+  background: #f5f3ef;
+}
+
+.wishlist-page h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2f2f2f;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}

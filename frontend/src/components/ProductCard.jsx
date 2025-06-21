@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './productCard.css';
 import { FaHeart } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import slugify from 'slugify'; // ✅ Ensure this is installed via `npm install slugify`
+import { Link, useNavigate } from 'react-router-dom';
+import slugify from 'slugify';
+import axios from 'axios';
+import { AuthProvider, useAuthContext } from '../context/AuthContext';
 
 const ProductCard = ({ product }) => {
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 
-  const toggleWishlist = () => {
-    setLiked(!liked);
+  const slugId = `${slugify(product.title, { lower: true, strict: true })}-${product._id}`;
+
+  useEffect(() => {
+    if (user?.wishlist?.includes(product._id)) {
+      setLiked(true)
+    }
+  }, [user, product._id])
+
+  const toggleWishlist = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
+        { productId: product._id },
+        { withCredentials: true }
+      );
+
+      // Simply toggle `liked`
+      setLiked(prev => !prev);
+
+    } catch (err) {
+      console.error('Error updating wishlist:', err);
+    }
   };
 
-  // ✅ Generate SEO-friendly slug with id
-  const slugId = `${slugify(product.title, { lower: true, strict: true })}-${product._id}`;
 
   return (
     <div className="product-card small">

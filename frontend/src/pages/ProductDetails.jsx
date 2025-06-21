@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaHeart } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
 import './productDetails.css';
+import { useAuthContext } from '../context/AuthContext';
 
 const ProductDetails = () => {
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+
   const { slugId } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImg, setSelectedImg] = useState('');
@@ -13,6 +17,37 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
+
+  useEffect(() => {
+    if (product && user?.wishlist?.includes(product._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [user, product]);
+
+  const toggleWishlist = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
+        { productId: product?._id },
+        { withCredentials: true }
+      );
+
+      // Simply toggle `liked`
+      setLiked(prev => !prev);
+
+    } catch (err) {
+      console.error('Error updating wishlist:', err);
+    }
+  };
+
+
 
   // Fetch product
   useEffect(() => {
@@ -46,7 +81,6 @@ const ProductDetails = () => {
     fetchRelated();
   }, [product]);
 
-  const toggleWishlist = () => setLiked(!liked);
 
   if (!product) return <p className="loading-text">Loading...</p>;
 
@@ -101,9 +135,8 @@ const ProductDetails = () => {
               {product.variants.map((v, idx) => (
                 <button
                   key={idx}
-                  className={`variant-chip ${
-                    selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
-                  }`}
+                  className={`variant-chip ${selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
+                    }`}
                   onClick={() => setSelectedVariant(v)}
                 >
                   {v.size} / {v.color}
