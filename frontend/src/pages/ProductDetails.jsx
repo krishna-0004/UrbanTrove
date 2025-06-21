@@ -9,8 +9,8 @@ import { useAuthContext } from '../context/AuthContext';
 const ProductDetails = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-
   const { slugId } = useParams();
+
   const [product, setProduct] = useState(null);
   const [selectedImg, setSelectedImg] = useState('');
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -18,38 +18,7 @@ const ProductDetails = () => {
   const [liked, setLiked] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  useEffect(() => {
-    if (product && user?.wishlist?.includes(product._id)) {
-      setLiked(true);
-    } else {
-      setLiked(false);
-    }
-  }, [user, product]);
-
-  const toggleWishlist = async () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
-        { productId: product?._id },
-        { withCredentials: true }
-      );
-
-      // Simply toggle `liked`
-      setLiked(prev => !prev);
-
-    } catch (err) {
-      console.error('Error updating wishlist:', err);
-    }
-  };
-
-
-
-  // Fetch product
+  // ✅ Fetch product
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -65,7 +34,35 @@ const ProductDetails = () => {
     fetchProduct();
   }, [slugId]);
 
-  // Fetch related products after product is fetched
+  // ✅ Set wishlist state
+  useEffect(() => {
+    if (product && user?.wishlist?.includes(product._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [user, product]);
+
+  // ✅ Toggle wishlist
+  const toggleWishlist = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
+        { productId: product._id },
+        { withCredentials: true }
+      );
+      setLiked(prev => !prev);
+    } catch (err) {
+      console.error('Error updating wishlist:', err);
+    }
+  };
+
+  // ✅ Fetch related products
   useEffect(() => {
     const fetchRelated = async () => {
       try {
@@ -81,6 +78,43 @@ const ProductDetails = () => {
     fetchRelated();
   }, [product]);
 
+  // ✅ Handle Add to Cart
+  const handleAddToCart = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!selectedVariant) {
+      alert('Please select a variant (size/color)');
+      return;
+    }
+
+    if (quantity < 1) {
+      alert('Please select a valid quantity');
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/cart/add`,
+        {
+          productId: product._id,
+          variant: {
+            size: selectedVariant.size,
+            color: selectedVariant.color,
+          },
+          quantity: parseInt(quantity),
+        },
+        { withCredentials: true }
+      );
+
+      alert('Product added to cart!');
+    } catch (err) {
+      console.error('Add to cart error:', err);
+      alert('Failed to add product to cart.');
+    }
+  };
 
   if (!product) return <p className="loading-text">Loading...</p>;
 
@@ -135,8 +169,9 @@ const ProductDetails = () => {
               {product.variants.map((v, idx) => (
                 <button
                   key={idx}
-                  className={`variant-chip ${selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
-                    }`}
+                  className={`variant-chip ${
+                    selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
+                  }`}
                   onClick={() => setSelectedVariant(v)}
                 >
                   {v.size} / {v.color}
@@ -158,8 +193,10 @@ const ProductDetails = () => {
             <span className="stock">({selectedVariant?.stock} left)</span>
           </div>
 
-          {/* Cart Button */}
-          <button className="add-to-cart-btn">Add to Cart</button>
+          {/* Add to Cart Button */}
+          <button className="add-to-cart-btn" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
 
           {/* Shipping Info */}
           <div className="meta-info">

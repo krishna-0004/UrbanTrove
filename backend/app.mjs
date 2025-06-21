@@ -9,6 +9,7 @@ import dotenv from "dotenv"
 import authRoutes from "./routes/authRoutes.mjs";
 import productRoutes from "./routes/productRoutes.mjs";
 import wishlistRoutes from "./routes/wishlistRoutes.mjs";
+import cartRoutes from "./routes/cartRoutes.mjs";
 
 
 import { ConnectDB } from "./config/db.mjs";
@@ -30,4 +31,6 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/cart', cartRoutes);
+
 export default app;
