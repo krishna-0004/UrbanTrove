@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Shop from "./pages/Shop";
 import ProductDetails from "./pages/ProductDetails";
+import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -21,7 +22,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/shop/:category" element={<Shop />} />
           <Route path="/product/:slugId" element={<ProductDetails />} />
-
+          <Route path="/search" element={<SearchResults />} />
           {/* Protected Routes */}
           <Route
             path="/dashboard"

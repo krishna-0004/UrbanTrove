@@ -99,3 +99,60 @@ export const getRelatedProducts = async (req, res) => {
   }
 }
 
+export const searchProducts = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query || query.trim() === "") {
+      return res.status(400).json({ message: "Query is required" });
+    }
+
+    const textResults = await Product.find(
+      { $text: { $search: query }, isVisible: true },
+      { score: { $meta: "textScore" } }
+    )
+      .sort({ score: { $meta: "textScore" } })
+      .limit(10)
+      .select("title images finalPrice discount price ratings slug");
+
+    if (textResults.length > 0) return res.json(textResults);
+
+    const regex = new RegExp(query, "i");
+    const fuzzyResults = await Product.find({
+      isVisible: true,
+      $or: [
+        { title: regex },
+        { description: regex },
+        { categories: regex }
+      ]
+    }).limit(10)
+      .select("title images finalPrice discount price ratings slug");
+
+    res.json(fuzzyResults);
+  } catch (err) {
+    console.error("Search error:", err);
+    res.status(500).json({ message: "Server error" });
+  } 
+};
+
+export const getSuggestions = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.trim() === "") {
+      return res.status(400).json({ message: "Query is required" });
+    }
+
+    const regex = new RegExp(`^${query}`, "i");
+    const suggestions = await Product.find({
+      title: regex,
+      isVisible: true
+    })
+      .limit(7)
+      .select("title slug");
+
+    res.json(suggestions);
+  } catch (err) {
+    console.error("Suggestion error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

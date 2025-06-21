@@ -4,6 +4,7 @@ import { HiShoppingCart } from "react-icons/hi";
 import { IoHeart } from "react-icons/io5";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
 import { useAuthContext } from "../context/AuthContext";
+import SearchBar from './SearchBar';
 import "./navbar.css";
 
 const Navbar = () => {
@@ -19,13 +20,7 @@ const Navbar = () => {
 
       {/* Search Bar */}
       <div className="products-search">
-        <input
-          type="search"
-          name="search-products"
-          id="search"
-          placeholder="Search for Products"
-        />
-        <FaSearch />
+        <SearchBar />
       </div>
 
       {/* Auth: Show user avatar + logout if logged in */}
