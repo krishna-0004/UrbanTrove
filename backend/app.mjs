@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes.mjs";
 import productRoutes from "./routes/productRoutes.mjs";
 import wishlistRoutes from "./routes/wishlistRoutes.mjs";
 import cartRoutes from "./routes/cartRoutes.mjs";
+import reviewRoutes from "./routes/reviewRoutes.mjs";
 
 
 import { ConnectDB } from "./config/db.mjs";
@@ -32,5 +33,6 @@ app.use("/api/auth", authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/cart', cartRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 export default app;

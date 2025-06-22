@@ -17,22 +17,40 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
-
-  // ✅ Fetch product
+  const [reviews, setReviews] = useState([]);
+  const [userReview, setUserReview] = useState(null);
+  const [newRating, setNewRating] = useState(0);
+  const [newComment, setNewComment] = useState("");
+  
+  // ✅ Fetch product and reviews
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductAndReviews = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/product/${slugId}`);
-        setProduct(res.data);
-        setSelectedImg(res.data.images[0]);
-        setSelectedVariant(res.data.variants[0]);
+        const productData = res.data;
+        setProduct(productData);
+        setSelectedImg(productData.images[0]);
+        setSelectedVariant(productData.variants[0]);
+
+        // Fetch reviews
+        const reviewRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/product/${productData._id}`);
+        setReviews(reviewRes.data);
+
+        if (user) {
+          const ownReview = reviewRes.data.find(r => r.user._id === user._id);
+          setUserReview(ownReview || null);
+        }
+
+        // Fetch related products
+        const relatedRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/related/${productData._id}`);
+        setRelatedProducts(relatedRes.data);
       } catch (err) {
-        console.error("Error fetching product:", err);
+        console.error("Error loading product or related/reviews:", err);
       }
     };
 
-    fetchProduct();
-  }, [slugId]);
+    fetchProductAndReviews();
+  }, [slugId, user]);
 
   // ✅ Set wishlist state
   useEffect(() => {
@@ -116,6 +134,27 @@ const ProductDetails = () => {
     }
   };
 
+  const handleSubmitReview = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/add`, {
+        productId: product._id,
+        rating: newRating,
+        comment: newComment
+      }, { withCredentials: true });
+
+      alert("Review submitted!");
+      setNewRating(0);
+      setNewComment('');
+      const refreshed = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/product/${product._id}`);
+      setReviews(refreshed.data);
+      const own = refreshed.data.find(r => r.user._id === user._id);
+      setUserReview(own);
+    } catch (err) {
+      alert(err.response?.data?.message || "Error submitting review.");
+    }
+  };
+
+
   if (!product) return <p className="loading-text">Loading...</p>;
 
   return (
@@ -169,9 +208,8 @@ const ProductDetails = () => {
               {product.variants.map((v, idx) => (
                 <button
                   key={idx}
-                  className={`variant-chip ${
-                    selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
-                  }`}
+                  className={`variant-chip ${selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
+                    }`}
                   onClick={() => setSelectedVariant(v)}
                 >
                   {v.size} / {v.color}
@@ -204,6 +242,48 @@ const ProductDetails = () => {
             <p><strong>Return Policy:</strong> {product.returnPolicy}</p>
           </div>
         </div>
+      </div>
+
+      <div className="reviews-section">
+        <h2>Customer Reviews</h2>
+
+        {reviews.length === 0 && <p>No reviews yet.</p>}
+        {reviews.map((review) => (
+          <div key={review._id} className="review-card">
+            <div className="review-header">
+              <strong>{review.user.name}</strong>
+              <span>⭐ {review.rating}</span>
+            </div>
+            <p>{review.comment}</p>
+          </div>
+        ))}
+
+        {!user ? (
+          <p className="login-to-review">Login to leave a review.</p>
+        ) : userReview ? (
+          <p className="already-reviewed">You already reviewed this product.</p>
+        ) : (
+          <div className="review-form">
+            <h3>Leave a Review</h3>
+            <label>
+              Rating:
+              <select value={newRating} onChange={(e) => setNewRating(Number(e.target.value))}>
+                <option value={0}>Select</option>
+                {[1, 2, 3, 4, 5].map(r => (
+                  <option key={r} value={r}>{r} Star{r > 1 ? 's' : ''}</option>
+                ))}
+              </select>
+            </label>
+            <textarea
+              placeholder="Write your feedback here..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <button className="submit-review-btn" onClick={handleSubmitReview}>
+              Submit Review
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Related Products */}
