@@ -111,3 +111,14 @@ export const removeFromCart = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const clearCart = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await Cart.findOneAndUpdate({ user: userId }, { items: [], coupon: null });
+    res.json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    console.error("Error clearing cart:", err);
+    res.status(500).json({ message: "Failed to clear cart" });
+  }
+};
