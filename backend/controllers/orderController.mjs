@@ -71,3 +71,13 @@ export const placeOrder = async (req, res) => {
     res.status(500).json({ message: "Failed to place order" });
   }
 };
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 }).limit(5);;
+    res.json(orders);
+  } catch (err) {
+    console.error("Error fetching user orders:", err);
+    res.status(500).json({ message: "Failed to fetch orders" });
+  }
+};
