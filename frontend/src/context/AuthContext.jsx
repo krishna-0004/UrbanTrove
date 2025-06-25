@@ -1,15 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-// Create the context
+// Create context
 const AuthContext = createContext();
 
-// Create the provider component
+// Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Fetch user profile on first load
+  // Fetch profile on load
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -17,7 +19,13 @@ export const AuthProvider = ({ children }) => {
           `${import.meta.env.VITE_API_URL}/api/auth/profile`,
           { withCredentials: true }
         );
+
         setUser(res.data.user);
+
+        // ✅ Auto redirect if admin
+        if (res.data.user.role === "admin") {
+          navigate("/admin");
+        }
       } catch (err) {
         setUser(null);
       } finally {
@@ -26,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   const logout = async () => {
     try {
@@ -40,11 +48,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook for using auth context
+// Hook to use auth context
 export const useAuthContext = () => useContext(AuthContext);

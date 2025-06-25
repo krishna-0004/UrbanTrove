@@ -12,7 +12,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  const { setUser } = useAuthContext(); // optional if you want to instantly update context
+  const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
   const {
@@ -39,25 +39,28 @@ const Login = () => {
       setServerError("");
 
       if (!otpSent) {
-        // Send OTP API
+        // Step 1: Send OTP
         await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
           email: data.email,
         });
         setOtpSent(true);
       } else {
-        // Verify OTP API
+        // Step 2: Verify OTP
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
           { email: data.email, otp: data.otp },
           { withCredentials: true }
         );
 
-        // Optional: update user context if needed
-        if (res.data?.user) {
-          setUser?.(res.data.user); // only if context supports setUser
-        }
+        const user = res.data.user;
+        setUser?.(user);
 
-        navigate("/dashboard");
+        // ✅ Redirect based on role
+        if (user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
       }
     } catch (err) {
       setServerError(err.response?.data?.message || "Something went wrong");
@@ -110,11 +113,7 @@ const Login = () => {
           {serverError && <span className="error">{serverError}</span>}
 
           <button type="submit" disabled={loading}>
-            {loading
-              ? "Please wait..."
-              : otpSent
-              ? "Verify OTP"
-              : "Send OTP"}
+            {loading ? "Please wait..." : otpSent ? "Verify OTP" : "Send OTP"}
           </button>
         </form>
 

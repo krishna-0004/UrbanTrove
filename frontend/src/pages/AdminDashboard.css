@@ -1,0 +1,145 @@
+/* Layout */
+.admin-dashboard-layout {
+  display: flex;
+  background-color: #f3f4f6;
+}
+
+.admin-dashboard-main {
+  margin-left: 260px;
+  padding: 40px 30px;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Heading */
+.admin-dashboard-main h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 35px;
+}
+
+/* Cards Section */
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.admin-card {
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  color: white;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-card::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px rgba(59, 130, 246, 0.25);
+}
+
+.admin-card h3 {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.admin-card p {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Recent Orders Section */
+.admin-recent-orders {
+  margin-top: 50px;
+}
+
+.admin-recent-orders h2 {
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* Table */
+.order-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  background: white;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+.order-table thead {
+  background-color: #f9fafb;
+}
+
+.order-table th,
+.order-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.order-table th {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.order-table td {
+  color: #374151;
+}
+
+/* Order Row Hover */
+.order-table tbody tr:hover {
+  background-color: #f3f4f6;
+  transition: background 0.2s ease;
+}
+
+/* Status Badge */
+.order-table td.status {
+  font-weight: 600;
+}
+
+.order-table td.status.paid {
+  color: #10b981;
+}
+
+.order-table td.status.unpaid {
+  color: #ef4444;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 24px;
+  color: #9ca3af;
+  font-style: italic;
+}
