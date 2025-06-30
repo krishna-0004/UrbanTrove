@@ -22,10 +22,6 @@ export const AuthProvider = ({ children }) => {
 
         setUser(res.data.user);
 
-        // ✅ Auto redirect if admin
-        if (res.data.user.role === "admin") {
-          navigate("/admin");
-        }
       } catch (err) {
         setUser(null);
       } finally {

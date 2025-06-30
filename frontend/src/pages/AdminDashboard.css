@@ -5,9 +5,8 @@
 }
 
 .admin-dashboard-main {
-  margin-left: 260px;
+  width: 100%;
   padding: 40px 30px;
-  width: calc(100% - 240px);
   min-height: 100vh;
   background-color: #f9fafb;
   font-family: 'Inter', sans-serif;

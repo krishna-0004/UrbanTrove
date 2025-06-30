@@ -55,7 +55,6 @@ const Login = () => {
         const user = res.data.user;
         setUser?.(user);
 
-        // ✅ Redirect based on role
         if (user.role === "admin") {
           navigate("/admin");
         } else {
@@ -71,6 +70,11 @@ const Login = () => {
 
   const handleGoogleAuth = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   return (

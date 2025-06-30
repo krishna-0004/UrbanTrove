@@ -15,7 +15,10 @@ import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProductTable from "./pages/ProductTable";
+import ProductForm from "./components/ProductForm";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -76,13 +79,18 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/admin"
+          path="/admin/*"
           element={
             <ProtectedAdminRoute>
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedAdminRoute>
           }
-        />
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<ProductTable />} />
+          <Route path="products/new" element={<ProductForm />} />
+          <Route path="products/edit/:id" element={<ProductForm />} />
+        </Route>
 
         <Route path="*" element={<NotFound />} />
       </Routes>

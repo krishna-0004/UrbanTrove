@@ -14,7 +14,7 @@ import reviewRoutes from "./routes/reviewRoutes.mjs";
 import paymentRoutes from "./routes/paymentRoutes.mjs"
 import orderRoutes from "./routes/orderRoutes.mjs";
 import adminRoutes from "./routes/adminRoutes.mjs"
-
+import adminproductRoutes from "./routes/adminProductRoutes.mjs";
 
 import { ConnectDB } from "./config/db.mjs";
 
@@ -40,5 +40,6 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/orders",orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin/product", adminproductRoutes);
 
 export default app;
