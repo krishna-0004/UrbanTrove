@@ -19,6 +19,8 @@ import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProductTable from "./pages/ProductTable";
 import ProductForm from "./components/ProductForm";
+import OrderTable from "./pages/OrderTable";
+import OrderDetails from "./components/OrderDetails";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -90,6 +92,8 @@ const AppRoutes = () => {
           <Route path="products" element={<ProductTable />} />
           <Route path="products/new" element={<ProductForm />} />
           <Route path="products/edit/:id" element={<ProductForm />} />
+          <Route path="orders" element={<ProtectedAdminRoute><OrderTable /></ProtectedAdminRoute>} />
+          <Route path="orders/:id" element={<ProtectedAdminRoute><OrderDetails /></ProtectedAdminRoute>} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
