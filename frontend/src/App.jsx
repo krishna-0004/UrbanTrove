@@ -21,6 +21,7 @@ import ProductTable from "./pages/ProductTable";
 import ProductForm from "./components/ProductForm";
 import OrderTable from "./pages/OrderTable";
 import OrderDetails from "./components/OrderDetails";
+import AnalyticsPage from "./pages/AnalyticsPage";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -94,6 +95,7 @@ const AppRoutes = () => {
           <Route path="products/edit/:id" element={<ProductForm />} />
           <Route path="orders" element={<ProtectedAdminRoute><OrderTable /></ProtectedAdminRoute>} />
           <Route path="orders/:id" element={<ProtectedAdminRoute><OrderDetails /></ProtectedAdminRoute>} />
+          <Route path="analytics" element={<ProtectedAdminRoute><AnalyticsPage /></ProtectedAdminRoute>} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

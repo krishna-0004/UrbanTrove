@@ -16,6 +16,7 @@ import orderRoutes from "./routes/orderRoutes.mjs";
 import adminRoutes from "./routes/adminRoutes.mjs"
 import adminproductRoutes from "./routes/adminProductRoutes.mjs";
 import adminorderRoutes from "./routes/adminOrderRoutes.mjs";
+import adminAnalyticsRoutes from './routes/adminAnalyticsRoutes.mjs';
 
 import { ConnectDB } from "./config/db.mjs";
 
@@ -43,5 +44,6 @@ app.use("/api/orders",orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/product", adminproductRoutes);
 app.use("/api/admin/order", adminorderRoutes)
+app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
 export default app;
