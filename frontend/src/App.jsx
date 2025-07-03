@@ -22,6 +22,7 @@ import ProductForm from "./components/ProductForm";
 import OrderTable from "./pages/OrderTable";
 import OrderDetails from "./components/OrderDetails";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import TrackOrder from "./pages/TrackOrder";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -78,6 +79,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/track/:orderId"
+          element={
+            <ProtectedRoute>
+              <TrackOrder />
             </ProtectedRoute>
           }
         />

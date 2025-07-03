@@ -1,0 +1,29 @@
+.tracking-container {
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.tracking-loading,
+.tracking-error {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+.tracking-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.tracking-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.tracking-container li {
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+}

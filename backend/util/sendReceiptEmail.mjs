@@ -6,6 +6,9 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/**
+ * Send order receipt email with optional tracking URL
+ */
 export const sendReceiptEmail = async ({
   email,
   fullName,
@@ -13,6 +16,7 @@ export const sendReceiptEmail = async ({
   dateTime,
   totalAmount,
   productList,
+  trackingUrl, // ✅ new
 }) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -40,6 +44,15 @@ export const sendReceiptEmail = async ({
         <ul style="padding: 0 20px; color: #555;">${productList}</ul>
         
         <h3 style="color: #333;">Total Amount Paid: <span style="color: #27ae60;">₹${totalAmount}</span></h3>
+
+        ${
+          trackingUrl
+            ? `<div style="text-align: center; margin-top: 20px;">
+                <a href="${trackingUrl}" style="display: inline-block; background-color: #27ae60; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Track Your Order</a>
+              </div>`
+            : ""
+        }
+
         <p style="text-align: center; color: #555;">Thank you for shopping with UrbanTrove!</p>
 
         <div style="text-align: center; margin-top: 20px;">
