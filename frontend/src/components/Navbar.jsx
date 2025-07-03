@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { HiShoppingCart } from "react-icons/hi";
 import { IoHeart } from "react-icons/io5";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
+import { MdReorder } from "react-icons/md";
+import { MdContactPhone } from "react-icons/md";
 import { useAuthContext } from "../context/AuthContext";
 import SearchBar from './SearchBar';
 import "./navbar.css";
@@ -56,6 +58,12 @@ const Navbar = () => {
       </Link>
       <Link to="/cart">
         <HiShoppingCart size={30} />
+      </Link>
+      <Link to="/orders">
+        <MdReorder  size={30} />
+      </Link>
+      <Link to="/contact">
+        <MdContactPhone size={30} />
       </Link>
     </nav>
   );

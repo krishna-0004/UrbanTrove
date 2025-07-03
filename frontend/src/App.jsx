@@ -23,6 +23,7 @@ import OrderTable from "./pages/OrderTable";
 import OrderDetails from "./components/OrderDetails";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import TrackOrder from "./pages/TrackOrder";
+import ContactUs from "./pages/ContactUs";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -87,6 +88,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <TrackOrder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <ContactUs />
             </ProtectedRoute>
           }
         />
