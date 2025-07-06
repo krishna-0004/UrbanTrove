@@ -5,6 +5,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -24,11 +26,13 @@ import OrderDetails from "./components/OrderDetails";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import TrackOrder from "./pages/TrackOrder";
 import ContactUs from "./pages/ContactUs";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import HelpSupport from "./pages/HelpSupport";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
   const location = useLocation();
-
   const isAdminPath = location.pathname.startsWith("/admin");
 
   return (
@@ -39,6 +43,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/shop/:category" element={<Shop />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/help" element={<HelpSupport />} />
         <Route path="/product/:slugId" element={<ProductDetails />} />
         <Route path="/search" element={<SearchResults />} />
 
@@ -94,11 +101,11 @@ const AppRoutes = () => {
         <Route
           path="/contact"
           element={
-            <ProtectedRoute>
               <ContactUs />
-            </ProtectedRoute>
           }
         />
+
+        {/* Admin Routes */}
         <Route
           path="/admin/*"
           element={
@@ -111,13 +118,16 @@ const AppRoutes = () => {
           <Route path="products" element={<ProductTable />} />
           <Route path="products/new" element={<ProductForm />} />
           <Route path="products/edit/:id" element={<ProductForm />} />
-          <Route path="orders" element={<ProtectedAdminRoute><OrderTable /></ProtectedAdminRoute>} />
-          <Route path="orders/:id" element={<ProtectedAdminRoute><OrderDetails /></ProtectedAdminRoute>} />
-          <Route path="analytics" element={<ProtectedAdminRoute><AnalyticsPage /></ProtectedAdminRoute>} />
+          <Route path="orders" element={<OrderTable />} />
+          <Route path="orders/:id" element={<OrderDetails />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {/* Show footer only on non-admin pages */}
+      {!isAdminPath && <Footer />}
     </>
   );
 };

@@ -1,0 +1,133 @@
+.footer {
+  background-color: #111;
+  color: #eee;
+  padding: 40px 20px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  flex: 1 1 220px;
+}
+
+.footer-brand h2 {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-brand p {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-links {
+  flex: 1 1 180px;
+}
+
+.footer-links h4 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links ul li {
+  margin-bottom: 8px;
+}
+
+.footer-links ul li a {
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-links ul li a:hover {
+  color: #fff;
+}
+
+.footer-newsletter {
+  flex: 1 1 240px;
+}
+
+.footer-newsletter h4 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-newsletter p {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 12px;
+}
+
+.footer-newsletter form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-newsletter input {
+  flex: 1 1 auto;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+}
+
+.footer-newsletter button {
+  padding: 8px 16px;
+  background-color: #fff;
+  color: #111;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.footer-newsletter button:hover {
+  background-color: #ddd;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-newsletter form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .footer-newsletter input,
+  .footer-newsletter button {
+    width: 100%;
+  }
+}
