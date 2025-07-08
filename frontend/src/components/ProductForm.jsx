@@ -116,16 +116,38 @@ const ProductForm = () => {
 
         {/* === Categories === */}
         <h3 className="section-title">Categories</h3>
-        <select name="categories" multiple value={form.categories} onChange={(e) =>
-          setForm((prev) => ({
-            ...prev,
-            categories: Array.from(e.target.selectedOptions, (o) => o.value),
-          }))
-        } className="form-select">
-          {["men", "women", "home-decor", "accessories", "gifts"].map((c) => (
-            <option key={c} value={c}>{c}</option>
+        <div className="multi-select">
+          {form.categories.map((cat) => (
+            <span key={cat} className="tag">
+              {cat}
+              <button type="button" onClick={() => {
+                setForm((prev) => ({
+                  ...prev,
+                  categories: prev.categories.filter((c) => c !== cat),
+                }));
+              }}>&times;</button>
+            </span>
           ))}
-        </select>
+
+          <select
+            onChange={(e) => {
+              const selected = e.target.value;
+              if (selected && !form.categories.includes(selected)) {
+                setForm((prev) => ({
+                  ...prev,
+                  categories: [...prev.categories, selected],
+                }));
+              }
+              e.target.selectedIndex = 0; // reset selection
+            }}
+            className="form-select"
+          >
+            <option value="">Select category</option>
+            {["men", "women", "home-decor", "accessories", "gifts"].map((c) =>
+              !form.categories.includes(c) && <option key={c} value={c}>{c}</option>
+            )}
+          </select>
+        </div>
 
         {/* === Image Upload === */}
         <h3 className="section-title">Product Images</h3>
