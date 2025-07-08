@@ -6,9 +6,6 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Send order receipt email with optional tracking URL
- */
 export const sendReceiptEmail = async ({
   email,
   fullName,
@@ -16,7 +13,7 @@ export const sendReceiptEmail = async ({
   dateTime,
   totalAmount,
   productList,
-  trackingUrl, // ✅ new
+  trackingUrl, 
 }) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",

@@ -94,7 +94,6 @@ const ProductForm = () => {
 
       <form onSubmit={handleSubmit} className="form-grid">
 
-        {/* === Basic Info === */}
         <h3 className="section-title">Basic Info</h3>
         <input name="title" value={form.title} onChange={handleChange} placeholder="Title" className="form-input" />
         <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="form-textarea" />
@@ -102,7 +101,6 @@ const ProductForm = () => {
         <input name="price" value={form.price} onChange={handleChange} placeholder="Price" type="number" className="form-input" />
         <input name="discount" value={form.discount} onChange={handleChange} placeholder="Discount (%)" type="number" className="form-input" />
 
-        {/* === Variants === */}
         <h3 className="section-title">Variants</h3>
         {form.variants.map((v, i) => (
           <div key={i} className="variant-group">
@@ -114,7 +112,6 @@ const ProductForm = () => {
         ))}
         <button type="button" className="add-btn" onClick={addVariant}>+ Add Variant</button>
 
-        {/* === Categories === */}
         <h3 className="section-title">Categories</h3>
         <div className="multi-select">
           {form.categories.map((cat) => (
@@ -138,7 +135,7 @@ const ProductForm = () => {
                   categories: [...prev.categories, selected],
                 }));
               }
-              e.target.selectedIndex = 0; // reset selection
+              e.target.selectedIndex = 0; 
             }}
             className="form-select"
           >
@@ -149,7 +146,6 @@ const ProductForm = () => {
           </select>
         </div>
 
-        {/* === Image Upload === */}
         <h3 className="section-title">Product Images</h3>
         <input type="file" multiple onChange={handleImageChange} className="form-file" />
         <div className="image-preview">
@@ -161,13 +157,11 @@ const ProductForm = () => {
           ))}
         </div>
 
-        {/* === Flags === */}
         <div className="checkbox-group">
           <label><input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} /> Featured</label>
           <label><input type="checkbox" name="isNewArrival" checked={form.isNewArrival} onChange={handleChange} /> New Arrival</label>
         </div>
 
-        {/* === Extra Info === */}
         <input name="shippingInfo" value={form.shippingInfo} onChange={handleChange} placeholder="Shipping Info" className="form-input" />
         <input name="returnPolicy" value={form.returnPolicy} onChange={handleChange} placeholder="Return Policy" className="form-input" />
         <input name="metaTitle" value={form.metaTitle} onChange={handleChange} placeholder="Meta Title" className="form-input" />

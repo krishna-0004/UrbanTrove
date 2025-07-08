@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { HiShoppingCart } from "react-icons/hi";
 import { IoHeart } from "react-icons/io5";
-import { FaUserCircle, FaSearch, FaBox } from "react-icons/fa";
-import { MdReorder } from "react-icons/md";
-import { MdContactPhone } from "react-icons/md";
+import { FaUserCircle, FaBox } from "react-icons/fa";
 import { useAuthContext } from "../context/AuthContext";
 import SearchBar from './SearchBar';
 import "./navbar.css";
@@ -14,18 +12,15 @@ const Navbar = () => {
 
   return (
     <nav className="nav-menu">
-      {/* Logo */}
       <Link to="/" className="logo-link">
         <img src="/logo-removebg-preview.png" alt="logo" />
         <img src="/name-removebg-preview.png" alt="company-name" />
       </Link>
 
-      {/* Search Bar */}
       <div className="products-search">
         <SearchBar />
       </div>
 
-      {/* Auth: Show user avatar + logout if logged in */}
       {user ? (
         <>
           <Link to="/dashboard" className="user-avatar">
@@ -52,7 +47,6 @@ const Navbar = () => {
         </Link>
       )}
 
-      {/* Wishlist & Cart */}
       <Link to="/wishlist">
         <IoHeart size={30} />
       </Link>

@@ -1,7 +1,6 @@
 import Cart from "../model/Cart.mjs";
 import Product from "../model/Product.mjs";
 
-// 🛒 Add or Update Item in Cart
 export const addToCart = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -15,11 +14,9 @@ export const addToCart = async (req, res) => {
 
     const sku = `${variant.size}-${variant.color}`;
 
-    // Find or create cart
     let cart = await Cart.findOne({ user: userId });
     if (!cart) cart = new Cart({ user: userId });
 
-    // Check if same product + sku exists
     const existingItem = cart.items.find(
       (item) => item.product.toString() === productId && item.sku === sku
     );
@@ -38,7 +35,6 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // Recalculate total
     cart.totalAmount = cart.items.reduce(
       (sum, item) => sum + item.priceAtAddTime * item.quantity,
       0
@@ -53,7 +49,6 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// 🧾 Get Cart
 export const getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
@@ -63,7 +58,6 @@ export const getCart = async (req, res) => {
   }
 };
 
-// ✏️ Update Quantity or Variant
 export const updateCartItem = async (req, res) => {
   try {
     const { productId, sku, quantity } = req.body;
@@ -77,7 +71,6 @@ export const updateCartItem = async (req, res) => {
 
     item.quantity = quantity;
 
-    // Recalculate total
     cart.totalAmount = cart.items.reduce(
       (sum, i) => sum + i.priceAtAddTime * i.quantity,
       0
@@ -90,7 +83,6 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-// ❌ Remove Item
 export const removeFromCart = async (req, res) => {
   try {
     const { productId, sku } = req.body;

@@ -14,7 +14,7 @@ const cartItemSchema = new mongoose.Schema(
       color: { type: String },
     },
     quantity: { type: Number, required: true, min: 1 },
-    priceAtAddTime: { type: Number, required: true }, // snapshot of price
+    priceAtAddTime: { type: Number, required: true }, 
     image: { type: String, required: true },
   },
   { _id: false }

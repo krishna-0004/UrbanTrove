@@ -6,7 +6,7 @@ export const createRazorpayOrder = async (req, res) => {
 
   try {
     const options = {
-      amount: Math.round(amount * 100), // ✅ Ensure integer (in paise)
+      amount: Math.round(amount * 100), 
       currency: 'INR',
       receipt: `receipt_order_${Date.now()}`
     };

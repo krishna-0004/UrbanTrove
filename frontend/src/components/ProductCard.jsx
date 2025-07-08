@@ -32,7 +32,6 @@ const ProductCard = ({ product }) => {
         { withCredentials: true }
       );
 
-      // Simply toggle `liked`
       setLiked(prev => !prev);
 
     } catch (err) {

@@ -2,9 +2,8 @@ import Product from "../model/Product.mjs";
 import { uploadToCloudinary } from "../config/cloudinary.mjs";
 import slugify from "slugify";
 import fs from "fs/promises";
-import fsSync from "fs"; // Used to check if file exists
+import fsSync from "fs"; 
 
-// Utility to parse incoming data safely
 const parseJSON = (value, fallback = []) => {
   try {
     return typeof value === "string" ? JSON.parse(value) : value || fallback;

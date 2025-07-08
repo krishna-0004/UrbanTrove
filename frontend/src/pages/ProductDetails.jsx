@@ -22,7 +22,6 @@ const ProductDetails = () => {
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
 
-  // ✅ Fetch product and reviews
   useEffect(() => {
     const fetchProductAndReviews = async () => {
       try {
@@ -32,7 +31,6 @@ const ProductDetails = () => {
         setSelectedImg(productData.images[0]);
         setSelectedVariant(productData.variants[0]);
 
-        // Fetch reviews
         const reviewRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/product/${productData._id}`);
         setReviews(reviewRes.data);
 
@@ -41,7 +39,6 @@ const ProductDetails = () => {
           setUserReview(ownReview || null);
         }
 
-        // Fetch related products
         const relatedRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/related/${productData._id}`);
         setRelatedProducts(relatedRes.data);
       } catch (err) {
@@ -52,7 +49,6 @@ const ProductDetails = () => {
     fetchProductAndReviews();
   }, [slugId, user]);
 
-  // ✅ Set wishlist state
   useEffect(() => {
     if (product && user?.wishlist?.includes(product._id)) {
       setLiked(true);
@@ -61,7 +57,6 @@ const ProductDetails = () => {
     }
   }, [user, product]);
 
-  // ✅ Toggle wishlist
   const toggleWishlist = async () => {
     if (!user) {
       navigate('/login');
@@ -80,7 +75,6 @@ const ProductDetails = () => {
     }
   };
 
-  // ✅ Fetch related products
   useEffect(() => {
     const fetchRelated = async () => {
       try {
@@ -96,7 +90,6 @@ const ProductDetails = () => {
     fetchRelated();
   }, [product]);
 
-  // ✅ Handle Add to Cart
   const handleAddToCart = async () => {
     if (!user) {
       navigate('/login');
@@ -160,7 +153,6 @@ const ProductDetails = () => {
   return (
     <>
       <div className="product-details-container">
-        {/* Images */}
         <div className="image-column">
           <div className="thumbnail-group">
             {product.images.map((img, i) => (
@@ -184,7 +176,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* Info */}
         <div className="info-column">
           <h1 className="product-title">{product.title}</h1>
           <div className="price-box">
@@ -201,7 +192,6 @@ const ProductDetails = () => {
           </div>
           <p className="description">{product.description}</p>
 
-          {/* Variants */}
           <div className="variant-section">
             <label>Choose Variant:</label>
             <div className="variant-options">
@@ -218,7 +208,6 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Quantity */}
           <div className="quantity-row">
             <label>Qty:</label>
             <input
@@ -231,12 +220,10 @@ const ProductDetails = () => {
             <span className="stock">({selectedVariant?.stock} left)</span>
           </div>
 
-          {/* Add to Cart Button */}
           <button className="add-to-cart-btn" onClick={handleAddToCart}>
             Add to Cart
           </button>
 
-          {/* Shipping Info */}
           <div className="meta-info">
             <p><strong>Shipping:</strong> {product.shippingInfo}</p>
             <p><strong>Return Policy:</strong> {product.returnPolicy}</p>

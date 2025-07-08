@@ -50,7 +50,6 @@ const trackingSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Static helper to add new tracking event
 trackingSchema.statics.addTrackingEvent = async function(orderId, userId, { status, location, message, trackingUrl }) {
   const tracking = await this.findOne({ orderId });
   const newEvent = { status, location, message };

@@ -74,7 +74,7 @@ const Checkout = () => {
               const verify = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/payment/verify`,
                 response,
-                { withCredentials: true }  // ✅ THIS LINE FIXES THE 401 ERROR
+                { withCredentials: true }  
               );
 
               if (verify.data.success) {
@@ -136,7 +136,6 @@ const placeOrder = async (method, paymentInfo) => {
       { withCredentials: true }
     );
 
-    // ✅ Clear cart
     await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/clear`, {
       withCredentials: true,
     });

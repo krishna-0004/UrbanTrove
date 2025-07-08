@@ -9,11 +9,9 @@ export const getAllOrders = async (req, res) => {
   const query = {};
 
   if (search) {
-    // ✅ only assign to _id if search is a valid ObjectId
     if (mongoose.Types.ObjectId.isValid(search)) {
       query._id = search;
     } else {
-      // Optional: implement text-based search (e.g., user name) if needed
       return res.status(400).json({ message: "Invalid Order ID" });
     }
   }
@@ -38,7 +36,6 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-// ✅ Get single order with tracking info
 export const getOrderById = async (req, res) => {
   const { id } = req.params;
 
@@ -54,7 +51,6 @@ export const getOrderById = async (req, res) => {
   res.json({ order, tracking });
 };
 
-// ✅ Update order status + tracking
 export const updateOrderStatus = async (req, res) => {
   const { status, location, message, trackingUrl } = req.body;
 
@@ -71,12 +67,10 @@ export const updateOrderStatus = async (req, res) => {
     return res.status(404).json({ message: "Order not found" });
   }
 
-  // Update order document
   order.orderStatus = status;
   if (status === "delivered") order.deliveredAt = new Date();
   await order.save();
 
-  // Update or create tracking document
   let tracking = await Tracking.findOne({ orderId: order._id });
 
   if (!tracking) {
@@ -95,7 +89,6 @@ export const updateOrderStatus = async (req, res) => {
 
   await tracking.save();
 
-  // ✅ Send Email Notification
   try {
     const subject = `Your order is now ${status.toUpperCase()}`;
     const body = `

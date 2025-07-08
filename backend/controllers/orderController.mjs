@@ -26,7 +26,6 @@ export const placeOrder = async (req, res) => {
     const isPaid = paymentInfo.status === "paid";
     const now = new Date();
 
-    // 1️⃣ Create order
     const newOrder = new Order({
       user: req.user._id,
       items,
@@ -41,7 +40,6 @@ export const placeOrder = async (req, res) => {
 
     await newOrder.save();
 
-    // 2️⃣ Reduce product stock
     for (const item of items) {
       await Product.updateOne(
         {
@@ -55,7 +53,6 @@ export const placeOrder = async (req, res) => {
       );
     }
 
-    // 3️⃣ Create initial tracking
     await Tracking.addTrackingEvent(newOrder._id, req.user._id, {
       status: "ordered",
       message: "Your order has been placed successfully.",
@@ -63,7 +60,6 @@ export const placeOrder = async (req, res) => {
       trackingUrl: `http://localhost:5173/track/${newOrder._id}`
     });
 
-    // 4️⃣ Send receipt email with tracking link
     if (isPaid) {
       const orderID = newOrder._id.toString().slice(-6).toUpperCase();
 
@@ -81,7 +77,7 @@ export const placeOrder = async (req, res) => {
     res.status(201).json({ message: "Order placed successfully", order: newOrder });
 
   } catch (err) {
-    console.error("❌ Order placement error:", err);
+    console.error("Order placement error:", err);
     res.status(500).json({ message: "Failed to place order" });
   }
 };

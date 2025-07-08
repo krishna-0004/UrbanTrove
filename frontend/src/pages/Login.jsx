@@ -39,13 +39,11 @@ const Login = () => {
       setServerError("");
 
       if (!otpSent) {
-        // Step 1: Send OTP
         await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
           email: data.email,
         });
         setOtpSent(true);
       } else {
-        // Step 2: Verify OTP
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
           { email: data.email, otp: data.otp },

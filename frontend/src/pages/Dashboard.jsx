@@ -12,7 +12,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Profile Card */}
       <div className="dashboard-profile-card">
         <img
           src={user.avatar}
@@ -26,7 +25,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Action Cards */}
       <div className="dashboard-actions">
         <Link to="/orders" className="dashboard-action">
           <FaBox size={24} />

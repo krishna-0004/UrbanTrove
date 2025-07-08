@@ -1,7 +1,6 @@
 import Review from "../model/Review.mjs";
 import Product from "../model/Product.mjs";
 
-// ⭐ Helper: Recalculate rating stats
 const updateProductRatings = async (productId) => {
   const reviews = await Review.find({ product: productId });
   const total = reviews.length;
@@ -21,7 +20,6 @@ const updateProductRatings = async (productId) => {
   });
 };
 
-// ✅ Add or Update Review
 export const addOrUpdateReview = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -56,13 +54,12 @@ export const addOrUpdateReview = async (req, res) => {
   }
 };
 
-// 📥 Get All Reviews for a Product
 export const getProductReviews = async (req, res) => {
   try {
     const { productId } = req.params;
 
     const reviews = await Review.find({ product: productId })
-      .populate("user", "name avatar") // get name and avatar from user
+      .populate("user", "name avatar") 
       .sort({ createdAt: -1 });
 
     res.json(reviews);
