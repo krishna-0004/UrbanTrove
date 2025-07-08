@@ -23,7 +23,9 @@ export const googleAuthSuccess = async (req, res) => {
   //   }
   // });
 
-  res.redirect(`${process.env.FRONTEND_URL}`)
+  const redirectPath = req.user.role === 'admin' ? "/admin" : "/";
+
+  res.redirect(`${process.env.FRONTEND_URL}${redirectPath}`);
 };
 
 export const googleAuthFailure = (req, res) => {

@@ -25,7 +25,6 @@ passport.use(
                         avatar: profile.photos[0].value
                     });
                 }
-
                 done(null, user);
             } catch (err) {
                 done(err, null);
