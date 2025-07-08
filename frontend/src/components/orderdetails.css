@@ -1,0 +1,101 @@
+/* Order Details Container */
+.order-detail {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.order-detail h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.order-detail p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Section Titles */
+.order-detail h4 {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+  color: #1f2937;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+/* Form Inputs */
+.order-detail select,
+.order-detail input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border-color 0.3s ease;
+}
+
+.order-detail select:focus,
+.order-detail input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* Update Button */
+.order-detail button {
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.order-detail button:hover {
+  background: #1d4ed8;
+}
+
+/* Item List */
+.order-detail ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.order-detail li {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-bottom: 0.75rem;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-detail {
+    padding: 1.2rem;
+  }
+
+  .order-detail h2 {
+    font-size: 1.5rem;
+  }
+
+  .order-detail button {
+    width: 100%;
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Order.css";
+import "./orderdetails.css"
 
 const OrderDetails = () => {
   const { id } = useParams();

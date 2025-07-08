@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "../components/Order.css";
+import "./orderstable.css";
 
 const OrderTable = () => {
   const [orders, setOrders] = useState([]);
