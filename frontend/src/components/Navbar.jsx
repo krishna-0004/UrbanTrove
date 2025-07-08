@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { HiShoppingCart } from "react-icons/hi";
 import { IoHeart } from "react-icons/io5";
-import { FaUserCircle, FaSearch } from "react-icons/fa";
+import { FaUserCircle, FaSearch, FaBox } from "react-icons/fa";
 import { MdReorder } from "react-icons/md";
 import { MdContactPhone } from "react-icons/md";
 import { useAuthContext } from "../context/AuthContext";
@@ -60,10 +60,7 @@ const Navbar = () => {
         <HiShoppingCart size={30} />
       </Link>
       <Link to="/orders">
-        <MdReorder  size={30} />
-      </Link>
-      <Link to="/contact">
-        <MdContactPhone size={30} />
+        <FaBox  size={25} />
       </Link>
     </nav>
   );
