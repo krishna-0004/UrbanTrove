@@ -21,7 +21,7 @@ const ProductDetails = () => {
   const [userReview, setUserReview] = useState(null);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
-  
+
   // ✅ Fetch product and reviews
   useEffect(() => {
     const fetchProductAndReviews = async () => {
@@ -247,14 +247,24 @@ const ProductDetails = () => {
       <div className="reviews-section">
         <h2>Customer Reviews</h2>
 
-        {reviews.length === 0 && <p>No reviews yet.</p>}
+        {reviews.length === 0 && (
+          <p className="no-reviews-text">No reviews yet.</p>
+        )}
+
         {reviews.map((review) => (
           <div key={review._id} className="review-card">
-            <div className="review-header">
-              <strong>{review.user.name}</strong>
-              <span>⭐ {review.rating}</span>
+            <div className="review-avatar">
+              {review.user.name.charAt(0).toUpperCase()}
             </div>
-            <p>{review.comment}</p>
+            <div className="review-content">
+              <div className="review-header">
+                <span className="review-name">{review.user.name}</span>
+                <span className="review-stars">
+                  {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                </span>
+              </div>
+              <p className="review-comment">{review.comment}</p>
+            </div>
           </div>
         ))}
 
@@ -265,28 +275,34 @@ const ProductDetails = () => {
         ) : (
           <div className="review-form">
             <h3>Leave a Review</h3>
-            <label>
-              Rating:
-              <select value={newRating} onChange={(e) => setNewRating(Number(e.target.value))}>
-                <option value={0}>Select</option>
-                {[1, 2, 3, 4, 5].map(r => (
-                  <option key={r} value={r}>{r} Star{r > 1 ? 's' : ''}</option>
+            
+            <div className="form-review">
+              <select
+                id="rating"
+                value={newRating}
+                onChange={(e) => setNewRating(Number(e.target.value))}
+              >
+                <option value={0}>Rating</option>
+                {[1, 2, 3, 4, 5].map((r) => (
+                  <option key={r} value={r}>
+                    {r} ⭐
+                  </option>
                 ))}
               </select>
-            </label>
-            <textarea
-              placeholder="Write your feedback here..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <button className="submit-review-btn" onClick={handleSubmitReview}>
-              Submit Review
-            </button>
+
+              <textarea
+                placeholder="Write your feedback here..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <button className="submit-review-btn" onClick={handleSubmitReview}>
+                Submit Review
+              </button>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Related Products */}
       {relatedProducts.length > 0 && (
         <div className="related-products-section">
           <h2>Related Products</h2>
