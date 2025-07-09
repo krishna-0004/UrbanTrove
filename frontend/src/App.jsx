@@ -29,6 +29,7 @@ import ContactUs from "./pages/ContactUs";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import HelpSupport from "./pages/HelpSupport";
+import Loader from "./components/Loader";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
@@ -42,6 +43,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/loader" element={<Loader />} />
         <Route path="/shop/:category" element={<Shop />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsAndConditions />} />
