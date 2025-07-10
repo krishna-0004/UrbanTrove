@@ -1,55 +1,60 @@
-import React from 'react';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
-import "./ContactUs.css";
+import './ContactUs.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContactUs = () => {
-    const form = useRef();
-    const [status, setStatus] = useState(null);
+  const form = useRef();
+  const [loading, setLoading] = useState(false);
 
-    const sendEmail = (e) => {
-        e.preventDefault();
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-        emailjs
-            .sendForm(
-                import.meta.env.VITE_EMAILJS_SERVICE_ID,
-                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-                form.current,
-                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-            )
-            .then(
-                () => {
-                    setStatus("Message sent successfully!");
-                    form.current.reset();
-                },
-                (error) => {
-                    setStatus("Failed to send message. Please try again.");
-                    console.error("EmailJS Error:", error);
-                }
-            );
-    };
-    return (
-        <div className="contact-container">
-            <h2>Contact Us</h2>
-            <form ref={form} onSubmit={sendEmail} className="contact-form">
-                <label>Name</label>
-                <input type="text" name="user_name" required />
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        () => {
+          toast.success('Message sent successfully!');
+          form.current.reset();
+        },
+        (error) => {
+          console.error('EmailJS Error:', error);
+          toast.error('Failed to send message. Please try again.');
+        }
+      )
+      .finally(() => setLoading(false));
+  };
 
-                <label>Email</label>
-                <input type="email" name="user_email" required />
+  return (
+    <div className="contact-container fade-in">
+      <ToastContainer position="top-right" autoClose={2500} theme="colored" />
+      <h2>Contact Us</h2>
+      <form ref={form} onSubmit={sendEmail} className="contact-form">
+        <label>Name</label>
+        <input type="text" name="user_name" required />
 
-                <label>Subject</label>
-                <input type="text" name="subject" required />
+        <label>Email</label>
+        <input type="email" name="user_email" required />
 
-                <label>Message</label>
-                <textarea name="message" rows="5" required />
+        <label>Subject</label>
+        <input type="text" name="subject" required />
 
-                <button type="submit">Send</button>
+        <label>Message</label>
+        <textarea name="message" rows="5" required />
 
-                {status && <p className="status-msg">{status}</p>}
-            </form>
-        </div>
-    )
-}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Sending...' : 'Send'}
+        </button>
+      </form>
+    </div>
+  );
+};
 
-export default ContactUs
+export default ContactUs;

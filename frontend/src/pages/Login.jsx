@@ -4,13 +4,14 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./login.css";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
 
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
@@ -23,26 +24,22 @@ const Login = () => {
     reset,
   } = useForm();
 
-  const email = watch("email");
-  const otp = watch("otp");
-
   const toggleForm = () => {
-    setIsLogin(!isLogin);
+    setIsLogin((prev) => !prev);
     setOtpSent(false);
     reset();
-    setServerError("");
   };
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      setServerError("");
 
       if (!otpSent) {
         await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
           email: data.email,
         });
         setOtpSent(true);
+        toast.success("OTP sent to your email.");
       } else {
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
@@ -53,6 +50,8 @@ const Login = () => {
         const user = res.data.user;
         setUser?.(user);
 
+        toast.success("Login successful!");
+
         if (user.role === "admin") {
           navigate("/admin");
         } else {
@@ -60,7 +59,7 @@ const Login = () => {
         }
       }
     } catch (err) {
-      setServerError(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -68,15 +67,12 @@ const Login = () => {
 
   const handleGoogleAuth = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
-    if (user.role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/dashboard");
-    }
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-container fade-in">
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+
       <div className="auth-card">
         <h2>{isLogin ? "Login" : "Register"}</h2>
 
@@ -112,10 +108,8 @@ const Login = () => {
             </>
           )}
 
-          {serverError && <span className="error">{serverError}</span>}
-
           <button type="submit" disabled={loading}>
-            {loading ? "Please wait..." : otpSent ? "Verify OTP" : "Send OTP"}
+            {loading ? "Processing..." : otpSent ? "Verify OTP" : "Send OTP"}
           </button>
         </form>
 
@@ -126,8 +120,10 @@ const Login = () => {
           Continue with Google
         </button>
 
-        <p onClick={toggleForm} style={{ cursor: "pointer" }}>
-          {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
+        <p onClick={toggleForm}>
+          {isLogin
+            ? "Don't have an account? Register"
+            : "Already have an account? Login"}
         </p>
       </div>
     </div>

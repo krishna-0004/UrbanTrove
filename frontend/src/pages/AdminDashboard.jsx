@@ -1,7 +1,7 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminSidebar from "../components/AdminSidebar";
+import Loader from "../components/Loader"; 
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -13,6 +13,8 @@ const AdminDashboard = () => {
     recentOrders: [],
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -22,11 +24,15 @@ const AdminDashboard = () => {
         setStats(res.data);
       } catch (err) {
         console.error("Error fetching admin stats:", err);
+      } finally {
+        setLoading(false); 
       }
     };
 
     fetchStats();
-  }, [])
+  }, []);
+
+  if (loading) return <Loader />; 
 
   return (
     <div className="admin-dashboard-layout">

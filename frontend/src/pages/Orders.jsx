@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader"; // Ensure this path is correct
 import "./orders.css";
 
 const Orders = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true); // New state
 
   useEffect(() => {
     if (!user) return navigate("/login");
@@ -20,16 +22,21 @@ const Orders = () => {
         setOrders(res.data);
       } catch (err) {
         console.error("Error fetching orders:", err);
+      } finally {
+        setLoading(false); // Stop loading regardless of success/fail
       }
     };
 
     fetchOrders();
   }, [user, navigate]);
 
-  if (!orders.length) return <p className="loading-text">No orders found.</p>;
+  if (loading) return <Loader />;
+
+  if (!orders.length)
+    return <p className="loading-text">No orders found.</p>;
 
   return (
-    <div className="orders-container">
+    <div className="orders-container fade-in">
       <h2>Your Orders</h2>
       {orders.map((order) => (
         <div className="order-card" key={order._id}>

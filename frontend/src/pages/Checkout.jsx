@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import "./checkout.css";
 
 const Checkout = () => {
@@ -19,6 +22,8 @@ const Checkout = () => {
     state: ""
   });
   const [paymentMethod, setPaymentMethod] = useState("razorpay");
+  const [loading, setLoading] = useState(true);
+  const [placingOrder, setPlacingOrder] = useState(false);
 
   useEffect(() => {
     if (!user) return navigate("/login");
@@ -31,6 +36,9 @@ const Checkout = () => {
         setCart(res.data);
       } catch (err) {
         console.error("Error fetching cart:", err);
+        toast.error("Failed to load cart.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -42,16 +50,26 @@ const Checkout = () => {
   };
 
   const validateAddress = () => {
-    return address.fullName && address.phone && address.pincode &&
-      address.addressLine && address.city && address.state;
+    const { fullName, phone, pincode, addressLine, city, state } = address;
+    return fullName && phone && pincode && addressLine && city && state;
   };
 
   const handleCheckout = async () => {
-    if (!cart || cart.items.length === 0) return alert("Your cart is empty.");
-    if (!validateAddress()) return alert("Please fill in all required address fields.");
+    if (!cart || cart.items.length === 0) {
+      toast.warn("Your cart is empty.");
+      return;
+    }
+
+    if (!validateAddress()) {
+      toast.warning("Please fill in all required address fields.");
+      return;
+    }
+
+    setPlacingOrder(true);
 
     if (paymentMethod === "cod") {
-      placeOrder("cod", { method: "cod", status: "pending" });
+      await placeOrder("cod", { method: "cod", status: "pending" });
+      setPlacingOrder(false);
     } else {
       try {
         const res = await axios.post(
@@ -74,22 +92,24 @@ const Checkout = () => {
               const verify = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/payment/verify`,
                 response,
-                { withCredentials: true }  
+                { withCredentials: true }
               );
 
               if (verify.data.success) {
-                placeOrder("razorpay", {
+                await placeOrder("razorpay", {
                   method: "razorpay",
                   razorpayOrderId,
                   razorpayPaymentId: response.razorpay_payment_id,
                   status: "paid"
                 });
               } else {
-                alert("Payment verification failed.");
+                toast.error("Payment verification failed.");
               }
             } catch (error) {
               console.error("Verification failed:", error);
-              alert("Something went wrong while verifying payment.");
+              toast.error("Something went wrong while verifying payment.");
+            } finally {
+              setPlacingOrder(false);
             }
           },
           prefill: {
@@ -97,63 +117,61 @@ const Checkout = () => {
             email: user.email,
             contact: address.phone,
           },
-          theme: {
-            color: "#000",
-          },
+          theme: { color: "#000" },
         };
 
         const razor = new window.Razorpay(options);
         razor.open();
       } catch (err) {
         console.error("Payment error:", err);
-        alert("Failed to initiate payment.");
+        toast.error("Failed to initiate payment.");
+        setPlacingOrder(false);
       }
     }
   };
 
+  const placeOrder = async (method, paymentInfo) => {
+    try {
+      const formattedItems = cart.items.map(item => ({
+        productId: item.product,
+        title: item.title,
+        sku: item.sku,
+        variant: item.variant,
+        quantity: item.quantity,
+        priceAtPurchase: item.priceAtAddTime,
+        image: item.image
+      }));
 
-const placeOrder = async (method, paymentInfo) => {
-  try {
-    const formattedItems = cart.items.map(item => ({
-      productId: item.product,
-      title: item.title,
-      sku: item.sku,
-      variant: item.variant,
-      quantity: item.quantity,
-      priceAtPurchase: item.priceAtAddTime,
-      image: item.image
-    }));
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/orders/place`,
+        {
+          items: formattedItems,
+          shippingAddress: address,
+          totalAmount: cart.totalAmount,
+          coupon: cart.coupon || {},
+          paymentInfo
+        },
+        { withCredentials: true }
+      );
 
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/orders/place`,
-      {
-        items: formattedItems,
-        shippingAddress: address,
-        totalAmount: cart.totalAmount,
-        coupon: cart.coupon || {},
-        paymentInfo
-      },
-      { withCredentials: true }
-    );
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/clear`, {
+        withCredentials: true,
+      });
 
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/clear`, {
-      withCredentials: true,
-    });
+      toast.success("Order placed successfully!");
+      setTimeout(() => navigate("/orders"), 1500);
+    } catch (err) {
+      console.error("Order error:", err);
+      toast.error("Order failed.");
+    }
+  };
 
-    alert("Order placed successfully!");
-    navigate("/orders");
-
-  } catch (err) {
-    console.error("Order error:", err);
-    alert("Order failed.");
-  }
-};
-
-
-  if (!cart) return <p className="loading-text">Loading checkout...</p>;
+  if (loading) return <Loader />;
+  if (!cart) return null;
 
   return (
     <div className="checkout-container">
+      <ToastContainer position="top-right" autoClose={2500} />
       <div className="checkout-left">
         <h2>Shipping Address</h2>
         <form className="address-form">
@@ -205,8 +223,12 @@ const placeOrder = async (method, paymentInfo) => {
           <div className="summary-total">
             <strong>Total: ₹{cart.totalAmount.toFixed(2)}</strong>
           </div>
-          <button className="place-order-btn" onClick={handleCheckout}>
-            Place Order
+          <button
+            className={`place-order-btn ${placingOrder ? "processing" : ""}`}
+            onClick={handleCheckout}
+            disabled={placingOrder}
+          >
+            {placingOrder ? "Placing Order..." : "Place Order"}
           </button>
         </div>
       </div>

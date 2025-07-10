@@ -192,7 +192,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   margin-bottom: 1.5rem;
 }
 
@@ -200,6 +200,11 @@
   background: #0056b3;
 }
 
+.add-to-cart-btn.loading {
+  background-color: #005fce;
+  cursor:  wait;
+  opacity: 0.8;
+}
 /* Meta Info */
 .meta-info {
   font-size: 0.95rem;

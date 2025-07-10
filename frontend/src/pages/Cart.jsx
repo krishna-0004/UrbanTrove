@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './cart.css';
 import axios from 'axios';
 import { useAuthContext } from '../context/AuthContext';
+import Loader from '../components/Loader';
 import { useNavigate } from 'react-router-dom';
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Cart = () => {
   const { user } = useAuthContext();
@@ -26,6 +29,7 @@ const Cart = () => {
         setCart(res.data);
       } catch (err) {
         console.error("Failed to fetch cart:", err);
+        toast.error("Failed to load cart. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -44,6 +48,7 @@ const Cart = () => {
       setCart(res.data.cart);
     } catch (err) {
       console.error("Failed to update item:", err);
+      toast.error("Failed to update quantity.");
     }
   };
 
@@ -57,8 +62,10 @@ const Cart = () => {
         }
       );
       setCart(res.data.cart);
+      toast.success("Item removed from cart.");
     } catch (err) {
       console.error("Failed to remove item:", err);
+      toast.error("Failed to remove item.");
     }
   };
 
@@ -73,15 +80,25 @@ const Cart = () => {
     });
   };
 
-  if (loading) return <p className="loading-text">Loading your cart...</p>;
+  if (loading) return <Loader />;
+
   if (!cart || cart.items.length === 0)
-    return <p className="empty-cart">Your cart is empty 😢</p>;
+    return (
+      <div className="empty-cart-message">
+        <h2>Your cart is empty 😢</h2>
+        <p>Looks like you haven’t added anything yet. Let’s get you started!</p>
+        <button onClick={() => navigate('/')}>Go Shopping</button>
+        <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+      </div>
+    );
 
   return (
     <div className="cart-container">
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+
       <div className="cart-left">
         {cart.items.map((item, index) => (
-          <div className="cart-card" key={index}>
+          <div className="cart-card fade-in" key={index}>
             <div className="card-img">
               <img src={item.image} alt={item.title} />
             </div>

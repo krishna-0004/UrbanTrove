@@ -1,13 +1,14 @@
 import React from "react";
 import { useAuthContext } from "../context/AuthContext";
-import "./dashboard.css"; // Create this file for styles
+import "./dashboard.css";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
 import { FaHeart, FaBox, FaMapMarkedAlt, FaSignOutAlt } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user, loading, logout } = useAuthContext();
 
-  if (loading) return <p>Loading profile...</p>;
+  if (loading) return < Loader />
   if (!user) return <p>User not logged in</p>;
 
   return (

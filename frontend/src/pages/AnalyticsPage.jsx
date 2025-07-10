@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loader from "../components/Loader";
 import axios from "axios";
 import "./AnalyticsPage.css";
 
@@ -7,6 +8,7 @@ const AnalyticsPage = () => {
   const [salesData, setSalesData] = useState([]);
   const [topProducts, setTopProducts] = useState([]);
   const [categoryBreakdown, setCategoryBreakdown] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     fetchAllAnalytics();
@@ -26,8 +28,12 @@ const AnalyticsPage = () => {
       setCategoryBreakdown(categoryRes.data);
     } catch (err) {
       console.error("Error loading analytics:", err);
+    } finally {
+      setLoading(false); 
     }
   };
+
+  if (loading) return <Loader />; 
 
   return (
     <div className="analytics-container">

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import ProductCard from '../components/ProductCard';
 import { useParams } from 'react-router-dom';
+import Loader from '../components/Loader';
 import "./shop.css";
 
 const Shop = () => {
@@ -35,7 +36,7 @@ const Shop = () => {
       <h2>{formattedCategory.replace('-', ' ').toUpperCase()}</h2>
 
       {loading ? (
-        <p>Loading Products...</p>
+        <Loader />
       ) : products.length === 0 ? (
         <p>No products found in this category.</p>
       ) : (

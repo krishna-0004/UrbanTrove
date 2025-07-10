@@ -1,15 +1,13 @@
-/* Container */
 .order-container {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 1.5rem;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   font-family: "Segoe UI", sans-serif;
 }
 
-/* Header */
 .order-container h2 {
   font-size: 1.8rem;
   font-weight: 600;
@@ -17,12 +15,11 @@
   color: #222;
 }
 
-/* Controls */
 .order-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   justify-content: space-between;
 }
 
@@ -33,25 +30,23 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   min-width: 240px;
-  max-width: 100%;
 }
 
 .order-controls input:focus,
 .order-controls select:focus {
-  border-color: #007bff;
+  border-color: #1976d2;
   outline: none;
 }
 
-/* Table Wrapper */
 .order-table-wrapper {
   overflow-x: auto;
 }
 
-/* Table Styles */
 .order-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 .order-table th,
@@ -68,24 +63,24 @@
   color: #333;
 }
 
-/* Link */
 .order-table td a {
-  color: #007bff;
-  text-decoration: none;
+  color: #1976d2;
   font-weight: 500;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
 .order-table td a:hover {
   text-decoration: underline;
 }
 
-/* Loading and Empty */
-.loading,
+/* Loader or No Data */
 .no-data {
   text-align: center;
   font-style: italic;
   color: #777;
-  padding: 1rem;
+  padding: 1.5rem;
+  font-size: 1rem;
 }
 
 /* Pagination */
@@ -102,21 +97,37 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.95rem;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .pagination button.active,
 .pagination button:hover {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
+  background: #1976d2;
+  color: #fff;
+  border-color: #1976d2;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .order-controls {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .order-controls input,

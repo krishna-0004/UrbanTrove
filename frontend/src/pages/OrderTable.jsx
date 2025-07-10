@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader"; // Ensure path is correct
 import "./orderstable.css";
 
 const OrderTable = () => {
@@ -41,7 +42,7 @@ const OrderTable = () => {
   };
 
   return (
-    <div className="order-container">
+    <div className="order-container fade-in">
       <h2>Order Management</h2>
 
       <div className="order-controls">
@@ -72,28 +73,24 @@ const OrderTable = () => {
       </div>
 
       <div className="order-table-wrapper">
-        <table className="order-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>User</th>
-              <th>Status</th>
-              <th>Total</th>
-              <th>Paid</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+        {loading ? (
+          <Loader />
+        ) : orders.length === 0 ? (
+          <div className="no-data">No orders found</div>
+        ) : (
+          <table className="order-table">
+            <thead>
               <tr>
-                <td colSpan="6" className="loading">Loading...</td>
+                <th>ID</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Actions</th>
               </tr>
-            ) : orders.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="no-data">No orders found</td>
-              </tr>
-            ) : (
-              orders.map((o) => (
+            </thead>
+            <tbody>
+              {orders.map((o) => (
                 <tr key={o._id}>
                   <td>{o._id.slice(-6)}</td>
                   <td>{o.user?.name || "N/A"}</td>
@@ -104,10 +101,10 @@ const OrderTable = () => {
                     <Link to={`/admin/orders/${o._id}`}>View</Link>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {totalPages > 1 && (

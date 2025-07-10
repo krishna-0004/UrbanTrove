@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaHeart } from 'react-icons/fa';
 import ProductCard from '../components/ProductCard';
+import Loader from '../components/Loader';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './productDetails.css';
 import { useAuthContext } from '../context/AuthContext';
 
@@ -21,6 +24,8 @@ const ProductDetails = () => {
   const [userReview, setUserReview] = useState(null);
   const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
     const fetchProductAndReviews = async () => {
@@ -42,7 +47,8 @@ const ProductDetails = () => {
         const relatedRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/related/${productData._id}`);
         setRelatedProducts(relatedRes.data);
       } catch (err) {
-        console.error("Error loading product or related/reviews:", err);
+        toast.error("Failed to load product.");
+        console.error(err);
       }
     };
 
@@ -64,31 +70,18 @@ const ProductDetails = () => {
     }
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
         { productId: product._id },
         { withCredentials: true }
       );
       setLiked(prev => !prev);
+      toast.success(liked ? "Removed from wishlist." : "Added to wishlist!");
     } catch (err) {
-      console.error('Error updating wishlist:', err);
+      console.error('Wishlist error:', err);
+      toast.error('Error updating wishlist.');
     }
   };
-
-  useEffect(() => {
-    const fetchRelated = async () => {
-      try {
-        if (product?._id) {
-          const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/related/${product._id}`);
-          setRelatedProducts(res.data);
-        }
-      } catch (err) {
-        console.error("Error fetching related products:", err);
-      }
-    };
-
-    fetchRelated();
-  }, [product]);
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -97,15 +90,16 @@ const ProductDetails = () => {
     }
 
     if (!selectedVariant) {
-      alert('Please select a variant (size/color)');
+      toast.warn('Please select a variant (size/color).');
       return;
     }
 
     if (quantity < 1) {
-      alert('Please select a valid quantity');
+      toast.warn('Please select a valid quantity.');
       return;
     }
 
+    setAddingToCart(true);
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/cart/add`,
@@ -120,14 +114,22 @@ const ProductDetails = () => {
         { withCredentials: true }
       );
 
-      alert('Product added to cart!');
+      toast.success('Product added to cart!');
     } catch (err) {
       console.error('Add to cart error:', err);
-      alert('Failed to add product to cart.');
+      toast.error('Failed to add product to cart.');
+    } finally {
+      setAddingToCart(false);
     }
   };
 
   const handleSubmitReview = async () => {
+    if (!newRating || !newComment.trim()) {
+      toast.warn("Please fill in both rating and comment.");
+      return;
+    }
+
+    setSubmittingReview(true);
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/add`, {
         productId: product._id,
@@ -135,7 +137,7 @@ const ProductDetails = () => {
         comment: newComment
       }, { withCredentials: true });
 
-      alert("Review submitted!");
+      toast.success("Review submitted!");
       setNewRating(0);
       setNewComment('');
       const refreshed = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/product/${product._id}`);
@@ -143,16 +145,19 @@ const ProductDetails = () => {
       const own = refreshed.data.find(r => r.user._id === user._id);
       setUserReview(own);
     } catch (err) {
-      alert(err.response?.data?.message || "Error submitting review.");
+      toast.error(err.response?.data?.message || "Error submitting review.");
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
-
-  if (!product) return <p className="loading-text">Loading...</p>;
+  if (!product) return <Loader />;
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={2500} />
       <div className="product-details-container">
+        {/* Image Section */}
         <div className="image-column">
           <div className="thumbnail-group">
             {product.images.map((img, i) => (
@@ -176,6 +181,7 @@ const ProductDetails = () => {
           </div>
         </div>
 
+        {/* Info Section */}
         <div className="info-column">
           <h1 className="product-title">{product.title}</h1>
           <div className="price-box">
@@ -198,8 +204,7 @@ const ProductDetails = () => {
               {product.variants.map((v, idx) => (
                 <button
                   key={idx}
-                  className={`variant-chip ${selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''
-                    }`}
+                  className={`variant-chip ${selectedVariant?.size === v.size && selectedVariant?.color === v.color ? 'active' : ''}`}
                   onClick={() => setSelectedVariant(v)}
                 >
                   {v.size} / {v.color}
@@ -220,8 +225,12 @@ const ProductDetails = () => {
             <span className="stock">({selectedVariant?.stock} left)</span>
           </div>
 
-          <button className="add-to-cart-btn" onClick={handleAddToCart}>
-            Add to Cart
+          <button
+            className={`add-to-cart-btn ${addingToCart ? 'loading' : ''}`}
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+          >
+            {addingToCart ? "Adding to Cart..." : "Add to Cart"}
           </button>
 
           <div className="meta-info">
@@ -231,18 +240,13 @@ const ProductDetails = () => {
         </div>
       </div>
 
+      {/* Reviews Section */}
       <div className="reviews-section">
         <h2>Customer Reviews</h2>
-
-        {reviews.length === 0 && (
-          <p className="no-reviews-text">No reviews yet.</p>
-        )}
-
+        {reviews.length === 0 && <p className="no-reviews-text">No reviews yet.</p>}
         {reviews.map((review) => (
           <div key={review._id} className="review-card">
-            <div className="review-avatar">
-              {review.user.name.charAt(0).toUpperCase()}
-            </div>
+            <div className="review-avatar">{review.user.name.charAt(0).toUpperCase()}</div>
             <div className="review-content">
               <div className="review-header">
                 <span className="review-name">{review.user.name}</span>
@@ -262,34 +266,34 @@ const ProductDetails = () => {
         ) : (
           <div className="review-form">
             <h3>Leave a Review</h3>
-            
             <div className="form-review">
               <select
-                id="rating"
                 value={newRating}
                 onChange={(e) => setNewRating(Number(e.target.value))}
               >
                 <option value={0}>Rating</option>
-                {[1, 2, 3, 4, 5].map((r) => (
-                  <option key={r} value={r}>
-                    {r} ⭐
-                  </option>
+                {[1, 2, 3, 4, 5].map(r => (
+                  <option key={r} value={r}>{r} ⭐</option>
                 ))}
               </select>
-
               <textarea
                 placeholder="Write your feedback here..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <button className="submit-review-btn" onClick={handleSubmitReview}>
-                Submit Review
+              <button
+                className="submit-review-btn"
+                onClick={handleSubmitReview}
+                disabled={submittingReview}
+              >
+                {submittingReview ? "Submitting..." : "Submit Review"}
               </button>
             </div>
           </div>
         )}
       </div>
 
+      {/* Related Products */}
       {relatedProducts.length > 0 && (
         <div className="related-products-section">
           <h2>Related Products</h2>

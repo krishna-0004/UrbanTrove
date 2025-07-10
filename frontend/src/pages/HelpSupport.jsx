@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./helpSupport.css";
+import Loader from "../components/Loader";
 
 const HelpSupport = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <Loader />;
+
   return (
-    <div className="help-page">
+    <div className="help-page fade-in">
       <h1>Help & Support</h1>
       <p>Need assistance? We're here to help! Browse the FAQs below or reach out to our support team.</p>
 
