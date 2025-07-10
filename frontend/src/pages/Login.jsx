@@ -10,60 +10,10 @@ import "./login.css";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    reset,
-  } = useForm();
-
-  const toggleForm = () => {
-    setIsLogin((prev) => !prev);
-    setOtpSent(false);
-    reset();
-  };
-
-  const onSubmit = async (data) => {
-    try {
-      setLoading(true);
-
-      if (!otpSent) {
-        await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
-          email: data.email,
-        });
-        setOtpSent(true);
-        toast.success("OTP sent to your email.");
-      } else {
-        const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
-          { email: data.email, otp: data.otp },
-          { withCredentials: true }
-        );
-
-        const user = res.data.user;
-        setUser?.(user);
-
-        toast.success("Login successful!");
-
-        if (user.role === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/dashboard");
-        }
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleGoogleAuth = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
