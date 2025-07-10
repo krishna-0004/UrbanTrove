@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // Create context
 const AuthContext = createContext();
@@ -9,7 +8,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   // Fetch profile on load
   useEffect(() => {
@@ -19,9 +17,7 @@ export const AuthProvider = ({ children }) => {
           `${import.meta.env.VITE_API_URL}/api/auth/profile`,
           { withCredentials: true }
         );
-
         setUser(res.data.user);
-
       } catch (err) {
         setUser(null);
       } finally {
@@ -30,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchUser();
-  }, [navigate]);
+  }, []);
 
   const logout = async () => {
     try {
