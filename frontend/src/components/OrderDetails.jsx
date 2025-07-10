@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./orderdetails.css"
+import "./orderdetails.css";
+import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -12,6 +14,7 @@ const OrderDetails = () => {
   const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
   const [trackingUrl, setTrackingUrl] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     fetchOrder();
@@ -28,27 +31,34 @@ const OrderDetails = () => {
       setTrackingUrl(res.data.tracking?.trackingUrl || "");
     } catch (err) {
       console.error("Order fetch error:", err);
+      toast.error("Failed to fetch order");
     }
   };
 
   const handleStatusUpdate = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/order/status/${id}`, {
-        status,
-        location,
-        message,
-        trackingUrl
-      }, { withCredentials: true });
-
-      alert("Status updated");
+      setUpdating(true);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/admin/order/status/${id}`,
+        {
+          status,
+          location,
+          message,
+          trackingUrl,
+        },
+        { withCredentials: true }
+      );
+      toast.success("Order status updated");
       fetchOrder();
     } catch (err) {
-      alert("Failed to update");
       console.error(err);
+      toast.error("Failed to update status");
+    } finally {
+      setUpdating(false);
     }
   };
 
-  if (!order) return <p>Loading...</p>;
+  if (!order) return <Loader />;
 
   return (
     <div className="order-detail">
@@ -64,17 +74,32 @@ const OrderDetails = () => {
           <option key={s} value={s}>{s}</option>
         ))}
       </select>
-      <input placeholder="Location (optional)" value={location} onChange={(e) => setLocation(e.target.value)} />
-      <input placeholder="Message (optional)" value={message} onChange={(e) => setMessage(e.target.value)} />
-      <input placeholder="Tracking URL (optional)" value={trackingUrl} onChange={(e) => setTrackingUrl(e.target.value)} />
 
-      <button onClick={handleStatusUpdate}>Update Status</button>
+      <input
+        placeholder="Location (optional)"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />
+      <input
+        placeholder="Message (optional)"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <input
+        placeholder="Tracking URL (optional)"
+        value={trackingUrl}
+        onChange={(e) => setTrackingUrl(e.target.value)}
+      />
+
+      <button onClick={handleStatusUpdate} disabled={updating}>
+        {updating ? "Updating..." : "Update Status"}
+      </button>
 
       <h4>Items</h4>
       <ul>
         {order.items.map((item, i) => (
           <li key={i}>
-            {item.title} - {item.variant?.size}/{item.variant?.color} x {item.quantity}
+            {item.title} - {item.variant?.size}/{item.variant?.color} × {item.quantity}
           </li>
         ))}
       </ul>
@@ -84,7 +109,9 @@ const OrderDetails = () => {
           <h4>Tracking History</h4>
           <ul>
             {tracking.history.map((ev, i) => (
-              <li key={i}>{ev.status} - {ev.message} @ {new Date(ev.timestamp).toLocaleString()}</li>
+              <li key={i}>
+                {ev.status} - {ev.message} @ {new Date(ev.timestamp).toLocaleString()}
+              </li>
             ))}
           </ul>
         </>

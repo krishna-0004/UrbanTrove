@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./ProductForm.css";
 
 const defaultProduct = {
@@ -17,6 +19,7 @@ const ProductForm = () => {
   const [form, setForm] = useState(defaultProduct);
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isEdit) {
@@ -25,6 +28,9 @@ const ProductForm = () => {
       }).then((res) => {
         setForm({ ...res.data });
         setExistingImages(res.data.images || []);
+      }).catch((err) => {
+        toast.error("Failed to load product");
+        console.error(err);
       });
     }
   }, [id]);
@@ -55,8 +61,14 @@ const ProductForm = () => {
     setForm((prev) => ({ ...prev, variants }));
   };
 
+  const handleImageChange = (e) => {
+    const selected = Array.from(e.target.files);
+    setImages((prev) => [...prev, ...selected]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const data = new FormData();
     for (const key in form) {
@@ -76,16 +88,15 @@ const ProductForm = () => {
       const url = `${import.meta.env.VITE_API_URL}/api/admin/product/${isEdit ? `update/${id}` : "add"}`;
       const method = isEdit ? axios.put : axios.post;
       await method(url, data, { withCredentials: true });
+
+      toast.success(`Product ${isEdit ? "updated" : "created"} successfully!`);
       navigate("/admin/products");
     } catch (err) {
-      alert("Error saving product.");
+      toast.error("Error saving product");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleImageChange = (e) => {
-    const selected = Array.from(e.target.files);
-    setImages((prev) => [...prev, ...selected]);
   };
 
   return (
@@ -93,7 +104,6 @@ const ProductForm = () => {
       <h2 className="form-heading">{isEdit ? "Edit" : "Add"} Product</h2>
 
       <form onSubmit={handleSubmit} className="form-grid">
-
         <h3 className="section-title">Basic Info</h3>
         <input name="title" value={form.title} onChange={handleChange} placeholder="Title" className="form-input" />
         <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="form-textarea" />
@@ -125,7 +135,6 @@ const ProductForm = () => {
               }}>&times;</button>
             </span>
           ))}
-
           <select
             onChange={(e) => {
               const selected = e.target.value;
@@ -135,7 +144,7 @@ const ProductForm = () => {
                   categories: [...prev.categories, selected],
                 }));
               }
-              e.target.selectedIndex = 0; 
+              e.target.selectedIndex = 0;
             }}
             className="form-select"
           >
@@ -167,8 +176,12 @@ const ProductForm = () => {
         <input name="metaTitle" value={form.metaTitle} onChange={handleChange} placeholder="Meta Title" className="form-input" />
         <input name="metaDescription" value={form.metaDescription} onChange={handleChange} placeholder="Meta Description" className="form-input" />
 
-        <button type="submit" className="form-submit">
-          {isEdit ? "Update" : "Create"} Product
+        <button type="submit" className="form-submit" disabled={loading}>
+          {loading ? (isEdit ? "Updating..." : "Creating...") : (isEdit ? "Update" : "Create")} Product
+        </button>
+
+        <button type="button" className="form-submit" onClick={() => navigate("/admin/products")} style={{ backgroundColor: "#6b7280" }}>
+          ← Back
         </button>
       </form>
     </div>

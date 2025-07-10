@@ -7,6 +7,18 @@
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   font-family: "Segoe UI", sans-serif;
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .order-detail h2 {
@@ -35,19 +47,20 @@
 .order-detail select,
 .order-detail input {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   margin-bottom: 1rem;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1rem;
   background: #f9fafb;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .order-detail select:focus,
 .order-detail input:focus {
   border-color: #3b82f6;
   outline: none;
+  background-color: #fff;
 }
 
 /* Update Button */
@@ -61,11 +74,17 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 0.5rem;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.order-detail button:hover {
+.order-detail button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.order-detail button:hover:not(:disabled) {
   background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 /* Item List */
