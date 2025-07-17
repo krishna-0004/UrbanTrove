@@ -149,7 +149,7 @@ const ProductForm = () => {
             className="form-select"
           >
             <option value="">Select category</option>
-            {["men", "women", "home-decor", "accessories", "gifts"].map((c) =>
+            {['Mens Fashion', 'Womens Fashion', 'Footwear', 'Bags & Accessories', 'Ethnic Wear', 'Smartphones', 'Smartwatches & Wearables', 'Earphones & Headphones', 'Laptops & Tablets', 'Accessories', 'Home Gadgets'].map((c) =>
               !form.categories.includes(c) && <option key={c} value={c}>{c}</option>
             )}
           </select>

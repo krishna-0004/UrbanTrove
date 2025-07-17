@@ -4,7 +4,7 @@ import Review from "../model/Review.mjs";
 
 export const getFeaturedCategories = async (req, res) => {
   try {
-    const categories = ['men', 'women', 'home-decor', 'accessories', 'gifts'];
+    const categories = ['Mens Fashion', 'Womens Fashion', 'Footwear', 'Bags & Accessories', 'Ethnic Wear', 'Smartphones', 'Smartwatches & Wearables', 'Earphones & Headphones', 'Laptops & Tablets', 'Accessories', 'Home Gadgets'];
     const data = {};
 
     for (const category of categories) {

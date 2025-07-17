@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
     finalPrice: { type: Number },
     categories: [{
         type: String,
-        enum: ['men', 'women', 'home-decor', 'accessories', 'gifts'],
+        enum: ['Mens Fashion', 'Womens Fashion', 'Footwear', 'Bags & Accessories', 'Ethnic Wear', 'Smartphones', 'Smartwatches & Wearables', 'Earphones & Headphones', 'Laptops & Tablets', 'Accessories', 'Home Gadgets'],
         required: true
     }],
     variants: [variantSchema],

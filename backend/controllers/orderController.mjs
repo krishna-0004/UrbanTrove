@@ -57,7 +57,7 @@ export const placeOrder = async (req, res) => {
       status: "ordered",
       message: "Your order has been placed successfully.",
       location: shippingAddress.city || "",
-      trackingUrl: `http://localhost:5173/track/${newOrder._id}`
+      trackingUrl: `https://urban-trove.vercel.app/track/${newOrder._id}`
     });
 
     if (isPaid) {
@@ -70,7 +70,7 @@ export const placeOrder = async (req, res) => {
         dateTime: now.toLocaleString("en-IN"),
         productList: formatProductList(items),
         totalAmount: totalAmount.toFixed(2),
-        trackingUrl: `http://localhost:5173/track/${newOrder._id}`
+        trackingUrl: `https://urban-trove.vercel.app/track/${newOrder._id}`
       });
     }
 

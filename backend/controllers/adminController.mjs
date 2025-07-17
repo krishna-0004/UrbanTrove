@@ -22,7 +22,7 @@ export const getAdminSummary = async (req, res) => {
             recentOrders
         });
     } catch (err) {
-        console.error("Error fetching admin summary:", error);
+        console.error("Error fetching admin summary:", err);
         res.status(500).json({ message: "Failed to fetch dashboard data" });
     }
 };
