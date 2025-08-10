@@ -1,105 +1,133 @@
+
 .search-bar-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 750px;
-  margin: 0 auto;
-  z-index: 100;
+position: relative;
+width: 100%;
+max-width: clamp(260px, 90vw, 750px); 
+margin: 0 auto;
+z-index: 100;
+padding: 0 12px; 
 }
 
+/* Bar */
 .search-bar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  padding: 8px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(6px);
-  transition: border 0.3s, box-shadow 0.3s;
+position: relative;
+display: flex;
+align-items: center;
+background: rgba(255, 255, 255, 0.9);
+border: 1px solid #ccc;
+border-radius: 30px;
+padding: 8px 14px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+backdrop-filter: blur(6px);
+transition: border 0.3s, box-shadow 0.3s;
 }
 
 .search-bar:focus-within {
-  border-color: #6b4f4f;
-  box-shadow: 0 0 0 3px rgba(107, 79, 79, 0.2);
+border-color: #6b4f4f;
+box-shadow: 0 0 0 3px rgba(107, 79, 79, 0.2);
 }
 
 .search-bar input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  padding: 10px 12px;
-  border-radius: 30px;
-  background: transparent;
-  color: #2f2f2f;
+flex: 1;
+border: none;
+outline: none;
+font-size: clamp(0.95rem, 0.4vw + 0.9rem, 1rem);
+padding: clamp(8px, 1.8vw, 10px) 12px;
+border-radius: 30px;
+background: transparent;
+color: #2f2f2f;
+min-width: 0; /* prevent overflow in flex */
 }
 
 .search-bar input::placeholder {
-  color: #aaa;
+color: #aaa;
 }
 
 .search-icon {
-  font-size: 1.4rem;
-  color: #6b4f4f;
-  cursor: pointer;
-  margin-left: 8px;
-  transition: color 0.3s;
+font-size: clamp(1.2rem, 1.2vw + 1rem, 1.4rem);
+color: #6b4f4f;
+cursor: pointer;
+margin-left: 8px;
+transition: color 0.3s;
 }
-
-.search-icon:hover {
-  color: #a0522d;
+@media (hover: hover) and (pointer: fine) {
+.search-icon:hover { color: #a0522d; }
 }
 
 .suggestion-list {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  z-index: 10;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
-  max-height: 260px;
-  overflow-y: auto;
-  animation: fadeIn 0.2s ease-in-out;
+position: absolute;
+top: calc(100% + 8px);
+left: 12px;
+right: 12px;
+background: #fff;
+border: 1px solid #ddd;
+border-radius: 10px;
+z-index: 10;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+list-style: none;
+padding: 0;
+margin: 8px 0 0;
+max-height: min(260px, 50vh); 
+overflow-y: auto;
+animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Ensure it doesn’t overflow on very small screens */
+@media (max-width: 480px) {
+.suggestion-list {
+left: 8px;
+right: 8px;
+border-radius: 8px;
+}
 }
 
 .suggestion-list li {
-  padding: 12px 18px;
-  cursor: pointer;
-  font-size: 0.96rem;
-  transition: background 0.2s ease;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #f2f2f2;
+padding: clamp(10px, 2.5vw, 12px) clamp(14px, 4vw, 18px);
+cursor: pointer;
+font-size: clamp(0.92rem, 0.4vw + 0.85rem, 0.98rem);
+transition: background 0.2s ease;
+display: flex;
+align-items: center;
+border-bottom: 1px solid #f2f2f2;
 }
+.suggestion-list li:last-child { border-bottom: none; }
 
-.suggestion-list li:last-child {
-  border-bottom: none;
-}
-
+@media (hover: hover) and (pointer: fine) {
 .suggestion-list li:hover,
-.suggestion-list li.active {
-  background: #fdf4f4;
+.suggestion-list li.active { background: #fdf4f4; }
+}
+/* Provide visible focus for keyboard users */
+.suggestion-list li:focus {
+outline: 2px solid #6b4f4f;
+outline-offset: -2px;
 }
 
 .suggestion-list strong {
-  font-weight: 600;
-  color: #6b4f4f;
+font-weight: 600;
+color: #6b4f4f;
 }
 
+/* Keyframes */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+from { opacity: 0; transform: translateY(3px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tablet/desktop spacing tweaks */
+@media (min-width: 768px) {
+.search-bar-wrapper { padding: 0; }
+.search-bar { padding: 10px 16px; }
+.suggestion-list { left: 0; right: 0; }
+}
+
+/* Tiny phones: reduce overall chrome */
+@media (max-width: 360px) {
+.search-bar { border-radius: 24px; }
+.search-bar input { padding: 8px 10px; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+.search-bar, .suggestion-list { transition: none; }
+.suggestion-list { animation: none; }
 }

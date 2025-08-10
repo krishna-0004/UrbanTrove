@@ -1,38 +1,40 @@
 .help-page {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 30px;
+  margin: clamp(24px, 6vw, 40px) auto;
+  padding: clamp(18px, 3.5vw, 30px);
   background-color: #fff;
   border-radius: 8px;
   font-family: "Segoe UI", sans-serif;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.7;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Headings */
 .help-page h1 {
-  font-size: 32px;
+  font-size: clamp(1.6rem, 1.8vw + 1rem, 2rem);
   margin-bottom: 10px;
   text-align: center;
   color: #1a1a1a;
 }
 
 .help-page h2 {
-  font-size: 24px;
-  margin-top: 30px;
+  font-size: clamp(1.2rem, 1.1vw + 0.9rem, 1.5rem);
+  margin-top: clamp(18px, 4vw, 30px);
   margin-bottom: 10px;
   color: #444;
 }
 
+/* FAQ section */
 .faq h3 {
-  margin-top: 20px;
-  font-size: 18px;
+  margin-top: clamp(14px, 3vw, 20px);
+  font-size: clamp(1rem, 0.7vw + 0.95rem, 1.125rem);
   color: #222;
 }
 
 .faq p {
-  margin-top: 5px;
-  font-size: 16px;
+  margin-top: 6px;
+  font-size: clamp(0.95rem, 0.5vw + 0.9rem, 1rem);
   color: #555;
 }
 
@@ -44,10 +46,82 @@
 
 .contact-list li {
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: clamp(0.95rem, 0.5vw + 0.9rem, 1rem);
+  line-height: 1.6;
 }
 
 .contact-list a {
   color: #007bff;
   text-decoration: none;
+  word-break: break-word;
+  padding: 2px 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-list a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Content width guard for long words/IDs */
+.help-page {
+  overflow-wrap: anywhere;
+}
+
+/* Tablet tweaks */
+@media (max-width: 1024px) {
+  .help-page {
+    padding: clamp(16px, 3.5vw, 24px);
+  }
+}
+
+@media (max-width: 768px) {
+  .help-page {
+    border-radius: 6px;
+  }
+
+  .help-page h1 {
+    text-align: left;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .help-page {
+    margin: 16px 12px;
+    padding: 16px;
+  }
+}
+
+/* Accessibility: focus styles */
+.help-page a:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Optional: dark mode */
+@media (prefers-color-scheme: dark) {
+  .help-page {
+    background-color: #0f1115;
+    color: #e5e7eb;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .help-page h1 {
+    color: #f3f4f6;
+  }
+
+  .help-page h2,
+  .faq h3 {
+    color: #e5e7eb;
+  }
+
+  .faq p,
+  .contact-list li {
+    color: #cbd5e1;
+  }
+
+  .contact-list a {
+    color: #60a5fa;
+  }
 }

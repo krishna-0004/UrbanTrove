@@ -1,17 +1,18 @@
 .featured-categories {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   padding: 40px 5%;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .category-card {
-  flex: 1 1 18%;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+flex: 1 1 calc(20% - 16px);
+min-width: 200px;
+text-align: center;
+cursor: pointer;
+transition: transform 0.3s ease;
 }
 
 .category-card img {
@@ -31,3 +32,60 @@
 .category-card:hover {
   transform: scale(1.05);
 }
+
+/* Tablet: 3 per row */
+@media (max-width: 1024px) {
+  .category-card {
+    flex: 1 1 calc(33.333% - 14px);
+  }
+
+  .category-card img {
+    height: 160px;
+  }
+}
+
+/* Large phones: 2 per row */
+@media (max-width: 768px) {
+  .featured-categories {
+    padding: 28px 4%;
+    gap: 16px;
+  }
+
+  .category-card {
+    flex: 1 1 calc(50% - 12px);
+  }
+
+  .category-card img {
+    height: 150px;
+  }
+
+  .category-card h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-categories {
+    padding: 24px 16px;
+    gap: 14px;
+  }
+
+  .category-card {
+    flex: 1 1 100%;
+  }
+
+  .category-card img {
+    height: 48vw;
+  }
+}
+
+  .category-card:hover {
+    transform: none;
+  }
+
+  /* Optional: prefers-reduced-motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .category-card {
+      transition: none;
+    }
+  }

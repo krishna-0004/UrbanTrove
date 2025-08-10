@@ -1,3 +1,4 @@
+/* Base tweaks for better wrapping and readable widths */
 .footer {
   background-color: #111;
   color: #eee;
@@ -14,65 +15,19 @@
   margin: 0 auto;
 }
 
-.footer-brand {
-  flex: 1 1 220px;
-}
-
-.footer-brand h2 {
-  font-size: 24px;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.footer-brand p {
-  color: #bbb;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.footer-links {
-  flex: 1 1 180px;
-}
-
-.footer-links h4 {
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.footer-links ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-links ul li {
-  margin-bottom: 8px;
+.footer-brand,
+.footer-links,
+.footer-newsletter {
+  flex: 1 1 260px;
+  min-width: 220px;
 }
 
 .footer-links ul li a {
+  display: inline-block;
+  padding: 4px 0;
   color: #bbb;
   text-decoration: none;
   transition: color 0.2s ease-in-out;
-}
-
-.footer-links ul li a:hover {
-  color: #fff;
-}
-
-.footer-newsletter {
-  flex: 1 1 240px;
-}
-
-.footer-newsletter h4 {
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.footer-newsletter p {
-  font-size: 14px;
-  color: #bbb;
-  margin-bottom: 12px;
 }
 
 .footer-newsletter form {
@@ -82,8 +37,9 @@
 }
 
 .footer-newsletter input {
-  flex: 1 1 auto;
-  padding: 8px 10px;
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 10px 12px;
   border: none;
   border-radius: 4px;
   outline: none;
@@ -91,20 +47,21 @@
 }
 
 .footer-newsletter button {
-  padding: 8px 16px;
+  padding: 10px 16px;
   background-color: #fff;
   color: #111;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s ease;
 }
 
-.footer-newsletter button:hover {
-  background-color: #ddd;
+.footer-newsletter button:active {
+  transform: scale(0.98);
 }
 
+/* Bottom area */
 .footer-bottom {
   text-align: center;
   margin-top: 40px;
@@ -114,20 +71,79 @@
   color: #aaa;
 }
 
-/* Responsive */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 32px 16px 16px;
+  }
+
+  .footer-top {
+    gap: 24px;
+    padding: 0 4px;
+  }
+
+  .footer-newsletter input {
+    font-size: 15px;
+  }
+}
+
+/* Mobile: stack columns and make inputs/buttons full width */
 @media (max-width: 768px) {
   .footer-top {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .footer-brand,
+  .footer-links,
+  .footer-newsletter {
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .footer-newsletter form {
     flex-direction: column;
     width: 100%;
+    gap: 12px;
   }
 
   .footer-newsletter input,
   .footer-newsletter button {
     width: 100%;
+  }
+
+  .footer-bottom {
+    margin-top: 28px;
+    padding-top: 12px;
+    font-size: 13px;
+  }
+}
+
+/* Small phones: slightly larger text and spacing, prevent edge-to-edge feel */
+@media (max-width: 480px) {
+  .footer {
+    padding: 28px 16px 16px;
+  }
+
+  .footer-brand h2 {
+    font-size: 22px;
+  }
+
+  .footer-links h4,
+  .footer-newsletter h4 {
+    font-size: 15px;
+  }
+
+  .footer-brand p,
+  .footer-newsletter p,
+  .footer-links ul li a {
+    font-size: 14px;
+  }
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .footer-newsletter button {
+    transition: none;
   }
 }

@@ -1,27 +1,163 @@
 .legal-page {
   max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
+  margin: clamp(24px, 6vw, 40px) auto;
+  padding: clamp(16px, 3.5vw, 24px);
   background-color: #fff;
   border-radius: 8px;
-  line-height: 1.7;
+  line-height: 1.8;
   color: #333;
   font-family: Arial, sans-serif;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  overflow-wrap: anywhere;
+  /* prevent overflow on long URLs/terms */
 }
 
+/* Headings */
 .legal-page h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: clamp(1.6rem, 1.6vw + 1rem, 1.85rem);
+  margin-bottom: clamp(12px, 2.5vw, 20px);
   color: #222;
   text-align: center;
 }
 
 .legal-page h2 {
-  font-size: 20px;
-  margin-top: 25px;
+  font-size: clamp(1.1rem, 1.1vw + 0.9rem, 1.35rem);
+  margin-top: clamp(18px, 3.5vw, 25px);
+  margin-bottom: 8px;
   color: #444;
 }
 
-.legal-page p {
+/* Body text */
+.legal-page p,
+.legal-page li {
   margin: 10px 0;
+  font-size: clamp(0.95rem, 0.5vw + 0.9rem, 1rem);
+  color: #333;
+}
+
+/* Lists */
+.legal-page ul,
+.legal-page ol {
+  padding-left: 1.25rem;
+  margin: 10px 0;
+}
+
+.legal-page li+li {
+  margin-top: 6px;
+}
+
+/* Links */
+.legal-page a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+/* Sections divider (optional) */
+.legal-page .section {
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  margin-top: 16px;
+}
+
+/* Tables (if present) */
+.legal-page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 0.95em;
+}
+
+.legal-page th,
+.legal-page td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+}
+
+.legal-page table {
+  overflow: auto;
+  display: block;
+}
+
+/* Quotes/code blocks (optional) */
+.legal-page blockquote {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-left: 3px solid #ddd;
+  background: #fafafa;
+}
+
+.legal-page code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+}
+
+/* Tablet tweaks */
+@media (max-width: 1024px) {
+  .legal-page {
+    padding: clamp(14px, 3.2vw, 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .legal-page {
+    border-radius: 6px;
+  }
+
+  .legal-page h1 {
+    text-align: left;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .legal-page {
+    margin: 16px 12px;
+    padding: 14px;
+  }
+}
+
+/* Accessibility: focus styles */
+.legal-page a:focus-visible {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* Optional: dark mode */
+@media (prefers-color-scheme: dark) {
+  .legal-page {
+    background-color: #0f1115;
+    color: #e5e7eb;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .legal-page h1 {
+    color: #f3f4f6;
+  }
+
+  .legal-page h2 {
+    color: #e5e7eb;
+  }
+
+  .legal-page p,
+  .legal-page li {
+    color: #cbd5e1;
+  }
+
+  .legal-page a {
+    color: #60a5fa;
+  }
+
+  .legal-page th,
+  .legal-page td {
+    border-color: #1f2937;
+  }
+
+  .legal-page blockquote {
+    background: #0b0d11;
+    border-left-color: #1f2937;
+  }
 }

@@ -1,5 +1,4 @@
-/* navbar.css */
-
+/* Base container */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -10,122 +9,91 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
+/* Logo */
 .nav-menu img {
   height: 55px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
 
-.nav-menu img:hover {
-  transform: scale(1.05);
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu img:hover {
+    transform: scale(1.05);
+  }
 }
 
+/* Search */
 .products-search {
   display: flex;
   align-items: center;
   flex: 1;
   max-width: 700px;
+  margin: 0 16px;
+  min-width: 200px;
 }
 
+/* Links area (desktop) */
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
 .nav-menu a {
   color: #2f2f2f;
   text-decoration: none;
-  margin-left: 25px;
-  display: flex;
+  margin-left: 0;
+  /* use gap instead */
+  display: inline-flex;
   align-items: center;
-  transition: all 0.3s ease;
   position: relative;
+  transition: color 0.2s ease;
+  will-change: color;
 }
 
-.nav-menu a:hover {
-  color: #a0522d; /* Rustic Brown */
-  transform: scale(1.1);
+@media (hover: hover) and (pointer: fine) {
+  .nav-menu a:hover {
+    color: #a0522d;
+  }
+
+  .nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #a0522d;
+    transition: width 0.25s ease;
+  }
+
+  .nav-menu a:hover::after {
+    width: 100%;
+  }
 }
 
-.nav-menu a::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background-color: #a0522d;
-  transition: width 0.3s ease;
+/* Avoid scale hover on mobile to prevent layout shift */
+@media (hover: none) and (pointer: coarse) {
+  .nav-menu a {
+    transform: none !important;
+  }
 }
 
-.nav-menu a:hover::after {
-  width: 100%;
-}
-
-/* Mobile menu toggle */
+/* Menu toggle (hamburger) */
 .menu-toggle {
   display: none;
   font-size: 28px;
   cursor: pointer;
   color: #6b4f4f;
+  background: none;
+  border: 0;
+  line-height: 1;
 }
 
-/* Responsive layout */
-@media (max-width: 1024px) {
-  .nav-menu {
-    flex-wrap: wrap;
-    padding: 12px 20px;
-  }
-
-  .products-search {
-    order: 3;
-    width: 100%;
-    margin: 15px 0;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-menu {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 20px;
-    position: relative;
-  }
-
-  .nav-menu img {
-    height: 45px;
-  }
-
-  .products-search {
-    width: 100%;
-    order: 3;
-    margin: 10px 0;
-  }
-
-  .nav-icons {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .nav-icons a {
-    margin: 10px 0;
-    font-size: 18px;
-  }
-
-  .menu-toggle {
-    display: block;
-    position: absolute;
-    right: 20px;
-    top: 18px;
-  }
-
-  .nav-icons.active {
-    display: flex;
-  }
-}
-
+/* Avatar and logout */
 .navbar-avatar {
   width: 30px;
   height: 30px;
@@ -141,4 +109,100 @@
   font-weight: bold;
   cursor: pointer;
   margin-left: 10px;
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+  .nav-menu {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+  }
+
+  .products-search {
+    order: 3;
+    width: 100%;
+    margin: 12px 0 4px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .nav-menu {
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px 16px;
+  }
+
+  .nav-menu img {
+    height: 45px;
+  }
+
+  /* Show hamburger */
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  /* Hide links by default; reveal with .active */
+  .nav-icons {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+
+  .nav-icons a {
+    padding: 8px 2px;
+    font-size: 16px;
+  }
+
+  .nav-icons.active {
+    display: flex;
+  }
+
+  .products-search {
+    order: 3;
+    width: 100%;
+    margin: 10px 0 0;
+  }
+}
+
+/* Tiny phones */
+@media (max-width: 480px) {
+  .nav-menu {
+    padding: 8px 12px;
+  }
+
+  .nav-icons a {
+    font-size: 15px;
+  }
+
+  .navbar-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Optional: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .nav-menu,
+  .nav-menu img,
+  .nav-menu a::after {
+    transition: none;
+  }
+}
+
+/* Optional: sticky blur on scroll for nicer effect */
+@supports (backdrop-filter: blur(6px)) {
+  .nav-menu.scrolled {
+    backdrop-filter: blur(6px);
+    background-color: rgba(255, 255, 255, 0.8);
+  }
 }
