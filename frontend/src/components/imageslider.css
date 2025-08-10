@@ -1,8 +1,8 @@
 .slider-container {
   margin: 20px auto;
-  width: 95%;
-  max-width: 1100px;
-  height: clamp(260px, 48vw, 550px);
+  width: 95%;                  /* Slightly wider */
+  max-width: 1100px;           
+  height: 550px;               /* Slightly taller */
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
@@ -16,7 +16,6 @@
   height: 100%;
 }
 
-/* Slides */
 .swiper-slide {
   display: flex;
   justify-content: center;
@@ -32,6 +31,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* padding: 12px; */
   box-sizing: border-box;
 }
 
@@ -41,17 +41,12 @@
   object-fit: contain;
   border-radius: 12px;
   transition: transform 0.5s ease;
-  padding: 0;
 }
 
-/* Hover zoom on larger screens only (avoid jank on touch) */
-@media (hover: hover) and (pointer: fine) {
-  .slide-wrapper img:hover {
-    transform: scale(1.02);
-  }
-}
+/* Smooth zoom on hover */
 
-/* Pagination dots */
+
+/* Swiper pagination dots */
 .swiper-pagination-bullet {
   background: #bbb;
   opacity: 1;
@@ -59,55 +54,5 @@
 }
 
 .swiper-pagination-bullet-active {
-  background: #6b4f4f;
-}
-
-/* Breakpoints for fine-tuning */
-@media (max-width: 1024px) {
-  .slider-container {
-    height: clamp(240px, 52vw, 480px);
-    border-radius: 16px;
-  }
-
-  .slide-wrapper img {
-    border-radius: 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .slider-container {
-    width: 96%;
-    height: clamp(220px, 58vw, 420px);
-  }
-
-  /* Make pagination slightly larger for touch */
-  .swiper-pagination-bullet {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .slider-container {
-    width: 100%;
-    margin: 12px auto;
-    height: clamp(200px, 62vw, 360px);
-    border-radius: 12px;
-  }
-
-  .slide-wrapper img {
-    border-radius: 8px;
-  }
-
-  /* Reduce shadow to avoid heavy look on small screens */
-  .slider-container {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  }
-}
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .slide-wrapper img {
-    transition: none;
-  }
+  background: #6b4f4f; /* UrbanTrove primary color */
 }

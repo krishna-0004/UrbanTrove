@@ -1,3 +1,4 @@
+/* Order Details Container */
 .order-detail {
   max-width: 900px;
   margin: 2rem auto;
@@ -9,34 +10,26 @@
   animation: fadeIn 0.4s ease-in;
 }
 
-/* Optional: container width padding guard */
-.order-detail>*:not(.full-bleed) {
-  box-sizing: border-box;
-}
-
-/* Entrance animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Headings and text */
 .order-detail h2 {
-  font-size: clamp(1.4rem, 1.2vw + 1rem, 1.8rem);
+  font-size: 1.8rem;
   margin-bottom: 1.5rem;
   color: #111827;
 }
 
 .order-detail p {
   margin: 0.4rem 0;
-  font-size: clamp(0.95rem, 0.3vw + 0.9rem, 1rem);
+  font-size: 1rem;
   color: #333;
 }
 
@@ -44,7 +37,7 @@
 .order-detail h4 {
   margin-top: 2rem;
   margin-bottom: 0.8rem;
-  font-size: clamp(1.05rem, 0.6vw + 0.9rem, 1.2rem);
+  font-size: 1.2rem;
   color: #1f2937;
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
@@ -60,7 +53,7 @@
   border: 1px solid #ccc;
   font-size: 1rem;
   background: #f9fafb;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .order-detail select:focus,
@@ -68,20 +61,6 @@
   border-color: #3b82f6;
   outline: none;
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-/* Two-column form rows on wider screens (opt-in) */
-.order-detail .form-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-@media (min-width: 768px) {
-  .order-detail .form-row--2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* Update Button */
@@ -95,7 +74,7 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 0.5rem;
-  transition: background 0.2s ease, transform 0.15s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .order-detail button:disabled {
@@ -103,13 +82,12 @@
   cursor: not-allowed;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .order-detail button:hover:not(:disabled) {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
+.order-detail button:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
+/* Item List */
 .order-detail ul {
   list-style: none;
   padding: 0;
@@ -117,112 +95,26 @@
 }
 
 .order-detail li {
-  padding: clamp(0.6rem, 1.2vw, 0.9rem) clamp(0.8rem, 1.6vw, 1rem);
+  padding: 0.75rem 1rem;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background: #f8fafc;
   margin-bottom: 0.75rem;
   color: #374151;
-  font-size: clamp(0.9rem, 0.3vw + 0.85rem, 0.95rem);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px 12px;
-}
-
-.order-detail li>.meta {
-  text-align: right;
-  white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .order-detail {
-    padding: 1.6rem;
-    margin: 1.5rem auto;
-  }
-}
-
 @media (max-width: 768px) {
   .order-detail {
     padding: 1.2rem;
-    margin: 1rem auto;
-    border-radius: 10px;
+  }
+
+  .order-detail h2 {
+    font-size: 1.5rem;
   }
 
   .order-detail button {
     width: 100%;
-  }
-
-  .order-detail li {
-    grid-template-columns: 1fr;
-    /* stack meta below on small screens */
-  }
-
-  .order-detail li>.meta {
-    text-align: left;
-  }
-}
-
-@media (max-width: 480px) {
-  .order-detail {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-}
-
-/* Accessibility: reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .order-detail {
-    animation: none;
-  }
-
-  .order-detail button {
-    transition: none;
-  }
-}
-
-/* Optional: dark mode support */
-@media (prefers-color-scheme: dark) {
-  .order-detail {
-    background: #0f1115;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  }
-
-  .order-detail h2,
-  .order-detail h4 {
-    color: #e5e7eb;
-  }
-
-  .order-detail p {
-    color: #cbd5e1;
-  }
-
-  .order-detail li {
-    background: #0b0d11;
-    border-color: #1f2937;
-    color: #e5e7eb;
-  }
-
-  .order-detail select,
-  .order-detail input {
-    background: #0b0d11;
-    border-color: #374151;
-    color: #e5e7eb;
-  }
-
-  .order-detail select:focus,
-  .order-detail input:focus {
-    border-color: #60a5fa;
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-  }
-
-  .order-detail button {
-    background: #3b82f6;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .order-detail button:hover:not(:disabled) {
-      background: #2563eb;
-    }
   }
 }
