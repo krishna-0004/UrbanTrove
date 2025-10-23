@@ -6,7 +6,7 @@ export const addToCart = async (req, res) => {
     const userId = req.user._id;
     const { productId, variant, quantity } = req.body;
 
-    if (!productId || !variant || !quantity)
+    if (!productId || !variant || !quantity)+6
       return res.status(400).json({ message: "All fields required" });
 
     const product = await Product.findById(productId);

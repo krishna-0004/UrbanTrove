@@ -8,11 +8,11 @@ import accessories from "../assets/categories/accessories.jpeg";
 import gifts from "../assets/categories/gifts.jpeg";
 
 const categories = [
-    { name: 'Men', key: 'men', image: men },
-    { name: 'Women', key: 'women', image: women },
-    { name: 'Home', key: 'home-decor', image: home },
-    { name: 'Accessories', key: 'accessories', image: accessories },
-    { name: 'Gifts', key: 'gifts', image: gifts },
+    { name: 'Men', key: 'Mens Fashion', image: men },
+    { name: 'Women', key: 'Womens Fashion', image: women },
+    { name: 'Home', key: 'Home Gadgets', image: home },
+    { name: 'Accessories', key: 'Bags & Accessories', image: accessories },
+    { name: 'Gifts', key: 'Ethnic Wear', image: gifts },
 ];
 
 const FeaturedCategories = () => {
