@@ -59,7 +59,6 @@ const Checkout = () => {
       toast.warn("Your cart is empty.");
       return;
     }
-
     if (!validateAddress()) {
       toast.warning("Please fill in all required address fields.");
       return;
@@ -72,6 +71,7 @@ const Checkout = () => {
       setPlacingOrder(false);
     } else {
       try {
+        // 1️⃣ Create Razorpay order on backend
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
           { amount: cart.totalAmount },
@@ -80,8 +80,9 @@ const Checkout = () => {
 
         const { id: razorpayOrderId, amount } = res.data;
 
+        // 2️⃣ Razorpay checkout
         const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY,
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID, // public key only
           amount,
           currency: "INR",
           name: "UrbanTrove",
@@ -89,6 +90,7 @@ const Checkout = () => {
           order_id: razorpayOrderId,
           handler: async function (response) {
             try {
+              // 3️⃣ Verify payment on backend
               const verify = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/payment/verify`,
                 response,
@@ -154,9 +156,7 @@ const Checkout = () => {
         { withCredentials: true }
       );
 
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/clear`, {
-        withCredentials: true,
-      });
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/clear`, { withCredentials: true });
 
       toast.success("Order placed successfully!");
       setTimeout(() => navigate("/orders"), 1500);

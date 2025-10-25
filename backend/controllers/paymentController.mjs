@@ -1,25 +1,26 @@
 import { razorpay } from "../config/razorpay.mjs";
 import crypto from 'crypto';
 
+// Create Razorpay order
 export const createRazorpayOrder = async (req, res) => {
   const { amount } = req.body;
 
   try {
     const options = {
-      amount: Math.round(amount * 100), 
+      amount: Math.round(amount * 100), // paise
       currency: 'INR',
-      receipt: `receipt_order_${Date.now()}`
+      receipt: `receipt_order_${Date.now()}`,
     };
 
     const order = await razorpay.orders.create(options);
-    res.json(order);
+    res.json(order); // id, amount, currency
   } catch (err) {
     console.error("Razorpay Order Error:", err);
     res.status(500).json({ message: "Payment initiation failed" });
   }
 };
 
-
+// Verify payment signature
 export const verifyPayment = async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
   const body = razorpay_order_id + "|" + razorpay_payment_id;
