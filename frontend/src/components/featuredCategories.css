@@ -5,10 +5,14 @@
   padding: 40px 5%;
   gap: 20px;
   flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .category-card {
-  flex: 1 1 18%;
+  flex: 1 1 18%; /* default 5 cards per row approx */
+  min-width: 150px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -30,4 +34,29 @@
 
 .category-card:hover {
   transform: scale(1.05);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Large Tablet: 3-4 per row */
+@media (max-width: 1024px) {
+  .category-card {
+    flex: 1 1 22%; /* ~4 per row */
+  }
+}
+
+/* Tablet / Mobile: 2 per row */
+@media (max-width: 768px) {
+  .category-card {
+    flex: 1 1 48%; /* 2 per row */
+    min-width: 45%;
+  }
+}
+
+/* Small Mobile: 1 per row */
+@media (max-width: 480px) {
+  .category-card {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
 }

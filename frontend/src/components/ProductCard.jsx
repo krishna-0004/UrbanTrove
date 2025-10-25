@@ -4,7 +4,7 @@ import { FaHeart } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import slugify from 'slugify';
 import axios from 'axios';
-import { AuthProvider, useAuthContext } from '../context/AuthContext';
+import { useAuthContext } from '../context/AuthContext';
 
 const ProductCard = ({ product }) => {
   const { user } = useAuthContext();
@@ -15,9 +15,9 @@ const ProductCard = ({ product }) => {
 
   useEffect(() => {
     if (user?.wishlist?.includes(product._id)) {
-      setLiked(true)
+      setLiked(true);
     }
-  }, [user, product._id])
+  }, [user, product._id]);
 
   const toggleWishlist = async () => {
     if (!user) {
@@ -26,22 +26,19 @@ const ProductCard = ({ product }) => {
     }
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/wishlist/toggle`,
         { productId: product._id },
         { withCredentials: true }
       );
-
       setLiked(prev => !prev);
-
     } catch (err) {
       console.error('Error updating wishlist:', err);
     }
   };
 
-
   return (
-    <div className="product-card small">
+    <div className="product-card">
       <div className="image-wrapper">
         <Link to={`/product/${slugId}`}>
           <img src={product.images[0]} alt={product.title} />

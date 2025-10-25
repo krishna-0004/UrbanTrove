@@ -1,3 +1,4 @@
+/* ======================= SHOP PAGE ======================= */
 .shop-page {
   padding: 40px 5%;
   background-color: #fefefe;
@@ -12,8 +13,39 @@
   padding-bottom: 4px;
 }
 
+/* ======================= PRODUCT GRID ======================= */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr); /* 4 per row on desktop */
+  gap: 16px; /* default desktop gap */
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: 3 per row, smaller gap */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Mobile: 2 per row, 10px gap */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px !important;
+  }
+}
+
+/* Small Mobile: 2 per row, 10px gap */
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px !important; /* enforce gap for small screens */
+  }
 }

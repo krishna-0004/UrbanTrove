@@ -31,7 +31,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 12px; */
   box-sizing: border-box;
 }
 
@@ -43,9 +42,6 @@
   transition: transform 0.5s ease;
 }
 
-/* Smooth zoom on hover */
-
-
 /* Swiper pagination dots */
 .swiper-pagination-bullet {
   background: #bbb;
@@ -55,4 +51,40 @@
 
 .swiper-pagination-bullet-active {
   background: #6b4f4f; /* UrbanTrove primary color */
+}
+
+/* ---------------- RESPONSIVE ADJUSTMENTS ---------------- */
+
+/* Tablets (landscape & portrait) */
+@media (max-width: 1024px) {
+  .slider-container {
+    height: 450px;
+    max-width: 900px;
+  }
+}
+
+/* Large phones and small tablets */
+@media (max-width: 768px) {
+  .slider-container {
+    height: 350px;
+    border-radius: 16px;
+  }
+
+  .slide-wrapper img {
+    border-radius: 10px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .slider-container {
+    height: 250px;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+  }
 }

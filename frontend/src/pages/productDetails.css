@@ -489,32 +489,36 @@
   margin-bottom: 1rem;
 }
 
+/* Related Products - Row-wise */
 .related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;       /* allow wrapping to next row */
+  gap: 1.5rem;           /* space between cards */
+  justify-content: flex-start; /* align items to left */
 }
 
-/* Responsive */
+.related-grid .product-card {
+  flex: 1 1 calc(25% - 1.5rem); /* 4 per row on desktop */
+  max-width: calc(25% - 1.5rem);
+}
+
+@media (max-width: 1024px) {
+  .related-grid .product-card {
+    flex: 1 1 calc(33.33% - 1rem); /* 3 per row on tablets */
+    max-width: calc(33.33% - 1rem);
+  }
+}
+
 @media (max-width: 768px) {
-  .product-details-container {
-    flex-direction: column;
-    padding: 1rem;
+  .related-grid .product-card {
+    flex: 1 1 calc(50% - 1rem); /* 2 per row on mobile */
+    max-width: calc(50% - 1rem);
   }
+}
 
-  .related-products-section {
-    padding: 1rem;
-  }
-
-  .main-image {
+@media (max-width: 480px) {
+  .related-grid .product-card {
+    flex: 1 1 100%; /* 1 per row on very small screens */
     max-width: 100%;
-  }
-
-  .wishlist-icon {
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
-    font-size: 1.1rem;
   }
 }
