@@ -6,9 +6,9 @@ export const addToCart = async (req, res) => {
     const userId = req.user._id;
     const { productId, variant, quantity } = req.body;
 
-    if (!productId || !variant || !quantity)+6
+    if (!productId || !variant || !quantity){
       return res.status(400).json({ message: "All fields required" });
-
+    }
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
